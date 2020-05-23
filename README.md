@@ -1,9 +1,14 @@
 # covis19
 
+Visualizations (and some analysis) to support local efforts to mitigate effects of the COVID-19 pandemic. 
+
 ## Approach 
 
-## Goals
-Our goals were set at the first meeting, 21 May, 2020.  For each of the goals, our approach will be to begin with a small sample of counties (Miami Dade, Broward, Sumter, Alachua), and then proceed to all-county and state-wide analyses.  
+Our approach will be to begin with a small sample of counties (Miami Dade, Broward, Sumter, Alachua), and then proceed to all-county and state-wide analyses.  We want to support the communication of FL-specific information to news organizations and decision-makers.  
+
+## Initial targets
+
+Our initial targets were set at the first meeting, 21 May, 2020.   
 
 1. Deploy an awesome visualization for recent new cases.  Find the right data and develop graphic conventions to illustrate new case dynamics meaningfully.  Make FL case curves available online. 
    * use FL data for counties with event date 
