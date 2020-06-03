@@ -9,6 +9,10 @@ line_list$ChartDate <- ymd_hms(line_list$ChartDate) %>% as.Date
 line_list$ret_day <- as.numeric(line_list$ChartDate - line_list$EventDate)
 
 #### Data carpentry
+## Specify start date and nowcast date.
+## Choose a starting date in which the trend (of case reporting) has stabilized,
+## typically this would be at least one or two week before the nowcasting window.
+start_date <- ymd("2020-04-20")
 nowcast_date <- ymd("2020-05-17")
 
 ## For this exercise purpose, we go back to how linelist would look like on the nowcast date
@@ -19,7 +23,7 @@ line_list_now <- line_list %>%
 ## which is usually a trapezium. Consider only 14-day window.
 ## Also remove negative "return day" which happen :/
 date_train <- line_list_now %>%
-  filter(EventDate >= ymd("2020-04-20"), EventDate <= nowcast_date) %>%
+  filter(EventDate >= start_date, EventDate <= nowcast_date) %>%
   filter(ret_day >= 0, ret_day <= 14) %>%
   filter(ret_day <= as.numeric(nowcast_date - EventDate)) %>%
   dplyr::select(EventDate, ChartDate, ret_day)
@@ -38,7 +42,7 @@ nc <- surveillance::nowcast(now=nowcast_date, when=when,
                             control=nc.control, m=14)
 
 #### Extract predictions
-pred_df <- data.frame(EventDate = seq(ymd("2020-04-20"), nowcast_date, by=1),
+pred_df <- data.frame(EventDate = seq(start_date, nowcast_date, by=1),
                       mean = as.vector(nc@upperbound),
                       upCI = as.vector(nc@pi[,,2]),
                       loCI = as.vector(nc@pi[,,1]))
@@ -51,7 +55,7 @@ pred_df <- data.frame(EventDate = seq(ymd("2020-04-20"), nowcast_date, by=1),
 ## be larger than those derived from date_train.
 
 case_actual <- line_list_now %>%
-  filter(EventDate >= ymd("2020-04-20"), EventDate <= nowcast_date) %>%
+  filter(EventDate >= start_date, EventDate <= nowcast_date) %>%
   filter(ret_day >= 0) %>%
   group_by(EventDate) %>%
   summarise(n=n())
@@ -88,4 +92,5 @@ ggplot() +
   geom_errorbar(aes(x=EventDate, ymin=loCI, ymax=upCI), data=pred_df, width=0.25) +
   scale_fill_manual(name="", values=c("#E69F00", "#56B4E9"),
                     labels=c("Anticipated", "Reported")) +
-  labs(title = "Bayesian Poisson model (based on surveillance::nowcast)")
+  labs(title = "Bayesian Poisson model",
+       subtitle = "from surveillance::nowcast")
