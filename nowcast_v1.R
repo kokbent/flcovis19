@@ -2,7 +2,9 @@ library(tidyverse)
 library(surveillance)
 
 #### Data
-line_list <- read_csv("data/linelist_20200602.csv")
+download.file("https://opendata.arcgis.com/datasets/37abda537d17458bae6677b8ab75fcb9_0.csv", 
+              "data/linelist.csv")
+line_list <- read_csv("data/linelist.csv")
 
 line_list$EventDate <- ymd_hms(line_list$EventDate) %>% as.Date
 line_list$ChartDate <- ymd_hms(line_list$ChartDate) %>% as.Date
