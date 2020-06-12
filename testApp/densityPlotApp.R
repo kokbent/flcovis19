@@ -1,48 +1,32 @@
 library(sf)
 library(tidyverse)
-library(tigris)
 
-flBlockDat <- st_read("~/Desktop/fl_popDen/cenacs/cenacs_2018.shp") %>% 
-  select(geo_id = GEOID10, blockName = NAMELSAD, pop = TOTALPOP, countyCode = COUNTYFP10, ALAND, SHAPE_AREA, geometry = geometry) %>% 
-  st_set_geometry(NULL)
-
-flCounties <- tigris::counties("FL", cb = TRUE, class = "sf") %>% 
-  select(countyCode = COUNTYFP, name = NAME, geometry)
-
-flPopDen <- flBlockDat %>%
-  filter(pop != 0) %>% 
-  group_by(countyCode) %>% 
-  summarise(popArea = sum(ALAND), popTotal = sum(pop)) %>%
-  ungroup() %>% 
-  mutate(popDensqM = popTotal/popArea,
-         popDensqMi = popTotal/(popArea/(2.59e6))) %>% 
-  left_join(flCounties, by = c("countyCode" = "countyCode"))
-
+flPopDen <- st_read("shp/flPopDen.shp")
 flPopDen$countyCode <- factor(flPopDen$countyCode, levels = flPopDen$countyCode[order(flPopDen$popDensqMi, decreasing = TRUE)])
 flPopDen <- flPopDen[order(flPopDen$popDensqMi, decreasing = TRUE),]
 
-region_1 <- flPopDen[1,6] %>% 
+region_1 <- flPopDen[1,] %>% 
   mutate(County = name) %>% 
   select(-name)
-region_2 <- flPopDen[2,6]%>% 
+region_2 <- flPopDen[2,]%>% 
   mutate(County = name) %>% 
   select(-name)
-region_3 <- flPopDen[c(3:7),6] %>% 
+region_3 <- flPopDen[c(3:7),] %>% 
   sapply(as.character) %>% 
   as_tibble() %>% 
   mutate(County = name) %>% 
   select(-name)
-region_4 <- flPopDen[c(8:16),6] %>% 
+region_4 <- flPopDen[c(8:16),] %>% 
   sapply(as.character) %>% 
   as_tibble() %>% 
   mutate(County = name) %>% 
   select(-name)
-region_5 <- flPopDen[c(17:35),6] %>% 
+region_5 <- flPopDen[c(17:35),] %>% 
   sapply(as.character) %>% 
   as_tibble() %>% 
   mutate(County = name) %>% 
   select(-name)
-region_6 <- flPopDen[c(36:67),6] %>% 
+region_6 <- flPopDen[c(36:67),] %>% 
   sapply(as.character) %>% 
   as_tibble() %>% 
   mutate(County = name) %>% 
@@ -51,7 +35,7 @@ region_6 <- flPopDen[c(36:67),6] %>%
 flPopDenPlot <- flPopDen %>%
   ggplot(aes(x = countyCode, y = popDensqMi)) +
   scale_x_discrete(labels = flPopDen$name) +
-  theme(axis.text.x = element_text(angle = 90)) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) +
   labs(x = "County", y = "Population Density (ppl/sq. mi)") +
   annotate("rect", xmin = 0, xmax = 1.5, ymin = -Inf, ymax = Inf, alpha = 0.4, fill = "#E69F00") +
     geom_vline(xintercept = 1.5, size = 0.3, linetype = "dashed") +
