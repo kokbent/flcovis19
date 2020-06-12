@@ -1,0 +1,1 @@
+aboutText <- "Insert text here."
