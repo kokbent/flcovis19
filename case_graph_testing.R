@@ -5,6 +5,8 @@ library(tidyr)
 library(lubridate)
 library(stringr)
 
+setwd("~/Desktop/FL-case-test/datavis")
+
 #GLOBAL DATE SETTINGS
 effective_date <- Sys.Date() - ddays(14) # 2 weeks of "unreliable time"
 today_date <- as.character(Sys.Date()) %>% str_remove_all("-")
@@ -40,14 +42,14 @@ case_ev <- complete(case_ev, EventDate = seq.Date(min(case_ev$EventDate), max(ca
          n = ifelse(is.na(n), 0, n))
 
 #CALCULATE SEVEN-DAY TRAILING AVERAGE 
-case_ev$ma7 <- stats::filter(case_ev$n, rep(1/7, 7), sides = 1)
+case_ev$ca7 <- stats::filter(case_ev$n, rep(1/7, 7), sides = 2)
 
 #PLOT STATEWIDE DATA
 case_ev %>%
   filter(EventDate >= ymd("2020-03-01")) %>%
   ggplot() +
   geom_col(aes(x = EventDate, y = n, fill = as.factor(weekend)), colour = "black", alpha = 0.75) +
-  geom_line(aes(x = EventDate, y = ma7), lwd = 1.2) +
+  geom_line(aes(x = EventDate, y = ca7), lwd = 1.2) +
   annotate("rect", xmin = ymd(effective_date), xmax = max(case_ev$EventDate) + ddays(1), 
                 ymin = -Inf, ymax = Inf, alpha = 0.5) +
   scale_fill_manual(name = "", labels = c("Weekday", "Weekend"),
@@ -86,7 +88,7 @@ for (i in seq(split_counties)) {
            weekend = day %in% c("Sat", "Sun"),
            n = ifelse(is.na(n), 0, n))
   
-  split_counties[[i]]$ma7 <- stats::filter(split_counties[[i]]$n, rep(1/7, 7), sides = 1)
+  split_counties[[i]]$ca7 <- stats::filter(split_counties[[i]]$n, rep(1/7, 7), sides = 2)
   
 }
 
@@ -114,7 +116,7 @@ for (i in seq(split_counties)) {
 for (i in seq(split_counties)) {
   ggplot(split_counties[[i]]) +
     geom_col(aes(x = EventDate, y = n, fill = as.factor(weekend)), colour = "black", alpha = 0.75) +
-    geom_line(aes(x = EventDate, y = ma7), lwd = 1.2) +
+    geom_line(aes(x = EventDate, y = ca7), lwd = 1.2) +
     annotate("rect", xmin = ymd(effective_date), xmax = max(split_counties[[i]]$EventDate) + ddays(1), 
              ymin = -Inf, ymax = Inf, alpha = 0.5) +
     scale_fill_manual(name = "", labels = c("Weekday", "Weekend"),
@@ -132,4 +134,5 @@ for (i in seq(split_counties)) {
   ggsave(paste0("plots/", today_date, "/", names(split_counties[i]), "Countycases_", today_date, ".pdf"))
   ggsave(paste0("plots/", today_date, "/", names(split_counties[i]), "Countycases_", today_date, ".png"))
 }
+
 
