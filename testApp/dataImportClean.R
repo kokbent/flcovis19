@@ -15,21 +15,21 @@ setGlobalDates <- function(setbackDate = 14) {
 #IMPORT DATA
 getData <- function(){
   
-  #CREATE NEW DIRECTORY FOR TODAY'S PLOTS
-  #dir.create(paste0("plots/", today_date))
-  
-  #IMPORT DATA FROM FDOH
+  #CHECK IF DATA FILE EXIST, IF NOT, IMPORT DATA FROM FDOH
   in_file <- paste0("data/linelist_", today_date, ".csv")
-  download.file("https://opendata.arcgis.com/datasets/37abda537d17458bae6677b8ab75fcb9_0.csv",
-                in_file)
+  if (!file.exists(in_file)) {
+    download.file("https://opendata.arcgis.com/datasets/37abda537d17458bae6677b8ab75fcb9_0.csv",
+                  in_file)
+  }
   
   dat <<- read.csv(in_file)
+  colnames(dat)[1] <<- "County" # Weird character issue
 }
 
 #DATA CLEANUP FOR DATES
 reDate <- function(){
-  dat$EventDate <<- ymd_hms(dat$EventDate) %>% as.Date()
-  dat$ChartDate <<- ymd_hms(dat$ChartDate) %>% as.Date()
+  dat$EventDate <<- ymd_hms(dat$EventDate) %>% as.Date(tz = Sys.timezone())
+  dat$ChartDate <<- ymd_hms(dat$ChartDate) %>% as.Date(tz = Sys.timezone())
 }
 
 
@@ -49,8 +49,10 @@ caseCount <- function(){
 
 #FILL IN MISSING DATES AND LABEL DAYS AND WEEKENDS
 dateAvgFill <- function(){
-  case_ev <<- complete(case_ev, EventDate = seq.Date(min(case_ev$EventDate), max(case_ev$EventDate), by = 1),
-                      fill = list(0)) %>%
+  case_ev <<- complete(case_ev, 
+                       EventDate = seq.Date(min(case_ev$EventDate), 
+                                            max(case_ev$EventDate), by = 1),
+                       fill = list(0)) %>%
     mutate(day = wday(EventDate, label = T),
            weekend = day %in% c("Sat", "Sun"),
            n = ifelse(is.na(n), 0, n))
