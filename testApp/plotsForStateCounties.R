@@ -1,21 +1,53 @@
-statePlot <- case_ev %>%
-  filter(EventDate >= ymd("2020-03-01")) %>%
-  ggplot() +
-  geom_col(aes(x = EventDate, y = n, fill = as.factor(weekend)), colour = "black", alpha = 0.75) +
-  annotate("rect", xmin = ymd(effective_date), xmax = max(case_ev$EventDate) + ddays(1),
-           ymin = -Inf, ymax = Inf, alpha = 0.5) +
-  scale_fill_manual(name = "", labels = c("Weekday", "Weekend"),
-                    values = c("#D55E00", "#0072B2")) +
-  scale_x_date(expand=c(0,0), date_breaks = "1 week", date_labels = "%b %d",
-               limits = c(ymd("2020-02-29"), max(case_ev$EventDate)+ddays(1))) +
-  scale_y_continuous(expand = c(0, 0), limits = c(0, max(case_ev$n) + 100),
-                     breaks = 0:4 * 250) +
+pred_df <- read_csv("data/statewide-nowcast-preds.csv")
+
+pred_nowcast <- pred_df %>%
+  select(EventDate, n, pred, loCI, upCI) %>%
+  filter(!is.na(n))
+nowcast_date <- max(pred_df$EventDate)
+
+case_ev_plot <- case_ev %>%
+  filter(EventDate >= ymd("2020-03-01"), EventDate <= nowcast_date) %>%
+  select(-day, -ma7, -ca7)
+case_ev_plot <- left_join(case_ev_plot, pred_nowcast %>% select(EventDate, pred))
+
+#PIVOT TO LONG FORM FOR PLOTTING
+case_ev_plot <- case_ev_plot %>%
+  pivot_longer(-c("EventDate", "weekend"), 
+               names_to = "type", 
+               values_to = "n", 
+               values_drop_na = T)
+case_ev_plot$type <- factor(case_ev_plot$type, levels=c("pred", "n"))
+case_ev_plot$wknd_type <- paste(as.numeric(case_ev_plot$weekend), 
+                                case_ev_plot$type)
+case_ev_plot$wknd_type <- factor(case_ev_plot$wknd_type,
+                                     levels = c("0 pred", "1 pred", "0 n", "1 n"))
+
+ylim_max <- max(case_ev_plot$n, pred_df$upCI, na.rm = T)
+
+## STATE PLOT
+statePlot <- ggplot() +
+  geom_col(aes(x = EventDate, y = n, fill = wknd_type), data = case_ev_plot,
+           colour = "black", alpha = 0.9) +
+  geom_errorbar(aes(x = EventDate, ymin = loCI, ymax = upCI), data = pred_df, width = 0.25) +
+  scale_fill_manual(name="", values=c("#FF7000", "#00A3FF", 
+                                      "#813800", "#00588B"),
+                    labels=c("Weekday Anticipated", "Weekend Anticipated", 
+                             "Weekday Reported", "Weekend Reported")) +
+  scale_x_date(expand=c(0,0), date_breaks = "2 week", date_labels = "%b %d",
+               limits = c(ymd("2020-02-29"), nowcast_date+ddays(1))) +
+  scale_y_continuous(expand = c(0, 0), 
+                     limits = c(0, ylim_max + 100)) +
   theme_bw() +
-  theme(legend.position = "top", plot.margin = margin(10, 30, 10, 10), legend.text = element_text(size = 15, face = "bold"),
-        axis.text = element_text(size = 10), axis.title = element_text(size = 15), plot.caption = element_text(size = 12)) +
+  theme(legend.position = "top", 
+        plot.margin = margin(10, 30, 10, 10), 
+        legend.text = element_text(size = 12),
+        axis.text = element_text(size = 10), 
+        axis.title = element_text(size = 15), 
+        plot.caption = element_text(size = 12)) +
   labs(x = "Date", y = "Number of cases",
        caption = paste0("Data updated as of ", display_date))
 
+## COUNTY PLOT
 countyPlot <- function(county){
   ggplot(split_counties[[county]]) +
     geom_col(aes(x = EventDate, y = n, fill = as.factor(weekend)), colour = "black", alpha = 0.75) +
