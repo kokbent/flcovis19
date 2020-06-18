@@ -28,8 +28,8 @@ getData <- function(){
 
 #DATA CLEANUP FOR DATES
 reDate <- function(){
-  dat$EventDate <<- ymd_hms(dat$EventDate) %>% as.Date(tz = Sys.timezone())
-  dat$ChartDate <<- ymd_hms(dat$ChartDate) %>% as.Date(tz = Sys.timezone())
+  dat$EventDate <<- ymd_hms(dat$EventDate) %>% as.Date()
+  dat$ChartDate <<- ymd_hms(dat$ChartDate) %>% as.Date()
 }
 
 
