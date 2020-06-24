@@ -12,15 +12,15 @@ url1 <- paste0("https://services1.arcgis.com/CY1LXxl9zlJeBuRZ/arcgis/rest/servic
 tmp <- fromJSON(url1)
 
 total_rec <- tmp$count
-nr <- total_rec %/% 2000 + 1
-start1 <- seq(0, (nr-1)*2000, by=2000)
-stop1 <- seq(2000, nr*2000, by=2000)
+nr <- total_rec %/% 32000 + 1
+start1 <- seq(0, (nr-1)*32000, by=32000)
+stop1 <- seq(32000, nr*32000, by=32000)
 
 ll <- data.frame()
 for (i in 1:nr) {
   url1 <- paste0("https://services1.arcgis.com/CY1LXxl9zlJeBuRZ/arcgis/rest/services/Florida_COVID19_Case_Line_Data_NEW/FeatureServer/0/query?where=",
                  "ObjectId+>", start1[i], "+AND+ObjectId+<%3D+", stop1[i],
-                 "&objectIds=&time=&resultType=none&outFields=*&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&sqlFormat=none&f=pjson&token=")
+                 "&objectIds=&time=&resultType=standard&outFields=*&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&sqlFormat=none&f=pjson&token=")
   tmp <- fromJSON(url1, simplifyDataFrame = T)
   ll <- bind_rows(ll, tmp$features$attributes)
 }
