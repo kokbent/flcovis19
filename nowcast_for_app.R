@@ -1,5 +1,3 @@
-rm(list=ls())
-
 library(tidyverse)
 library(lubridate)
 library(nimble)
@@ -172,17 +170,17 @@ ma7_df$upCI[cond] <- NA
 #### Graphing
 ggplot() +
   geom_col(aes(x=EventDate, y=n, fill=wknd_type), data=case_actual_long,
-           alpha = 0.9) +
+           alpha = 0.9, colour = "black") +
   geom_errorbar(aes(x=EventDate, ymin=loCI, ymax=upCI), data=pred_df, width=0.25) +
-  geom_line(aes(x = EventDate, y = mean), data = ma7_df, lwd = 1.1) +
-  geom_ribbon(aes(x = EventDate, ymin = loCI, ymax = upCI), data = ma7_df, alpha = 0.4) +
+  geom_line(aes(x = EventDate, y = ma7_mean), data = ma7_df, lwd = 1.1) +
+  geom_ribbon(aes(x = EventDate, ymin = ma7_loCI, ymax = ma7_upCI), data = ma7_df, alpha = 0.4) +
   scale_fill_manual(name="", values=c("#FF7000", "#00A3FF", 
                                       "#813800", "#00588B"),
                     labels=c("Weekday Anticipated", "Weekend Anticipated", 
                              "Weekday Reported", "Weekend Reported")) +
   scale_x_date(expand=c(0,0), date_breaks = "2 week", date_labels = "%b %d",
                limits = c(ymd("2020-02-29"), nowcast_date+ddays(1))) +
-  scale_y_continuous(expand = c(0, 0), limits = c(0, max(pred_df$upCI) + 100)) +
+  scale_y_continuous(expand = c(0, 0), limits = c(0, max(pred_df$upCI, na.rm = T) + 100)) +
   theme_bw() +
   theme(legend.position = "top", 
         plot.margin = margin(10, 30, 10, 10), 
@@ -190,7 +188,7 @@ ggplot() +
         axis.text = element_text(size = 10), 
         axis.title = element_text(size = 15), 
         plot.caption = element_text(size = 12)) +
-  labs(x = "Date", y = "Number of cases",
+  labs(x = "Date", y = "Number of reported cases",
        caption = paste0("Data updated as of ", dat_date))
 
 
