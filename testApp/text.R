@@ -1,4 +1,4 @@
-aboutText <- "Insert text here."
+aboutText <- "To be completed."
 
 plotDisclaimer <- "See \"Plot Information\" below or \"About\" page for more information on how case numbers are reported and anticipated."
 
