@@ -22,9 +22,8 @@ getData() # Included dates stuff
 # Codes and functions for plotting state and counties cases
 source("plotsForStateCounties.R")
 
-#INSERT AHCA CODE SECTION 1 HERE
-# source("densityPlotApp.R")
-# source("regDatPlots.R")
+# GLOBAL OPTIONS
+options(DT.options = list(searching = FALSE))
 
 # DEFINE UI
 ui <- tagList(
@@ -36,29 +35,48 @@ ui <- tagList(
                                    h1("Number of Cases Statewide by Event Date"),
                                    h4(plotDisclaimer),
                                    h4(plotClickInstr),
-                                   plotOutput("stateCases", click = "stateClick", brush = brushOpts(id = "stateBrush", fill = "#ccc", direction = "x"))
+                                   plotOutput("stateCases", 
+                                              width = "90%",
+                                              height = "500px",
+                                              click = "stateClick", 
+                                              brush = brushOpts(id = "stateBrush", 
+                                                                fill = "#ccc", 
+                                                                direction = "x"))
                             )#column
                           ),#fluidRow
                           fluidRow(
                             column(1,
-                                   dropdownButton(inputId = "stateDropdown", label = "Options", up = TRUE, icon = icon("gear"), status = "primary",
+                                   dropdownButton(inputId = "stateDropdown", 
+                                                  label = "Options", 
+                                                  up = TRUE, 
+                                                  icon = icon("gear"), 
+                                                  status = "primary",
                                                   p("Toggle Smooth Line"),
-                                                  switchInput(inputId = "stateSmoothToggle", value = TRUE)
-                                    ),
-                              ),
-                            column(8, align = "center",
-                                   box(title = "Selected Statewide Plot Data", width = NULL, status = "primary", solidHeader = TRUE,
+                                                  switchInput(inputId = "stateSmoothToggle", 
+                                                              value = TRUE)
+                                   ),
+                            ),
+                            column(6, 
+                                   align = "center",
+                                   box(title = "Selected Statewide Plot Data", 
+                                       width = NULL, 
+                                       status = "primary", 
+                                       solidHeader = TRUE,
                                        DT::DTOutput("stateInfo")
-                                     )#box
-                                   ),#column
-                            column(3, align = "center",
-                                   box(title = "Plot Information", width = NULL, status = "primary", solidHeader = TRUE,
-                                     p(strong("Event Date: "), "definition."),
-                                     p(strong("Number of Cases: "), "definition."),
-                                     p(strong("Trailing Average: "), "definition."),
-                                     p(strong("Centered Average: "), "definition.")
-                                     )#box
-                                   )#column
+                                   )#box
+                            ),#column
+                            column(5, 
+                                   align = "center",
+                                   box(title = "Plot Information", 
+                                       width = NULL, 
+                                       status = "primary", 
+                                       solidHeader = TRUE,
+                                       p(strong("Event Date: "), eventDateDesc),
+                                       # p(strong("Number of Cases: "), "definition."),
+                                       p(strong("Reported case: "), reportedCaseDesc),
+                                       p(strong("Anticipated case: "), anticipatedCaseDesc)
+                                   )#box
+                            )#column
                           )#fluidRow
                  ),#tabPanel
                  tabPanel("County-Level Cases",
@@ -141,15 +159,6 @@ ui <- tagList(
 # DEFINE SERVER
 server <- function(input, output, session) {
   
-  # GATHER AND CLEAN DATA AFTER EVERY COUNTY SELECTION
-  # setGlobalDates()
-  # getData()
-  # reDate()
-  # caseCount()
-  # dateAvgFill()
-  
-  
-  
   # RENDER STATE PLOTS
   output$stateCases <- renderCachedPlot({
     if(input$stateSmoothToggle == TRUE){
@@ -183,7 +192,8 @@ server <- function(input, output, session) {
       if(is.null(input$stateClick$x)) {
         initDT <- case_df[nrow(case_df),c(1,2,3,4)]
         initDT$EventDate <- initDT$EventDate %>% format(format = "%B %d, %Y")
-        return(datatable(initDT, colnames = c("Event Date", "Reported Cases", "Anticipated Cases", "Centered Average")))
+        return(datatable(initDT, colnames = c("Event Date", "Reported Cases", 
+                                              "Anticipated Cases", "Centered Average")))
       }
       else if(is.null(input$stateBrush$xmin)) { 
         lvls <- case_df$EventDate %>% 
@@ -192,19 +202,25 @@ server <- function(input, output, session) {
         dateTest <- lvls[round((input$stateClick$x)-18321)]
         pointData <- case_df[which(case_df$EventDate == dateTest), ]
         pointData$EventDate <- pointData$EventDate %>% format(format = "%B %d, %Y")
-        return(datatable(pointData[,c(1,2,3,4)], colnames = c("Event Date", "Reported Cases", "Anticipated Cases", "Centered Average")))
+        return(datatable(pointData[,c(1,2,3,4)], 
+                         colnames = c("Event Date", "Reported Cases", 
+                                      "Anticipated Cases", "Centered Average")))
       }
       else{
         brushData <- brushedPoints(case_df, input$stateBrush)
         brushData$EventDate <- brushData$EventDate %>% format(format = "%B %d, %Y")
-        return(datatable(brushData[,c(1,2,3,4)], colnames = c("Event Date", "Reported Cases", "Anticipated Cases", "Centered Average")))
+        return(datatable(brushData[,c(1,2,3,4)], 
+                         colnames = c("Event Date", "Reported Cases", 
+                                      "Anticipated Cases", "Centered Average")))
       }
     }
     else{
       if(is.null(input$stateClick$x)) {
         initDT <- case_df[nrow(case_df),c(1,2,3)]
         initDT$EventDate <- initDT$EventDate %>% format(format = "%B %d, %Y")
-        return(datatable(initDT, colnames = c("Event Date", "Reported Cases", "Anticipated Cases",)))
+        return(datatable(initDT, 
+                         colnames = c("Event Date", "Reported Cases", 
+                                      "Anticipated Cases",)))
       }
       else if(is.null(input$stateBrush$xmin)) { 
         lvls <- case_df$EventDate %>% 
@@ -213,12 +229,16 @@ server <- function(input, output, session) {
         dateTest <- lvls[round((input$stateClick$x)-18261)]
         pointData <- case_df[which(case_df$EventDate == dateTest), ]
         pointData$EventDate <- pointData$EventDate %>% format(format = "%B %d, %Y")
-        return(state_dt <- datatable(pointData[,c(1,2,3)], colnames = c("Event Date", "Reported Cases", "Anticipated Cases",)))
+        return(state_dt <- datatable(pointData[,c(1,2,3)], 
+                                     colnames = c("Event Date", "Reported Cases", 
+                                                  "Anticipated Cases",)))
       }
       else{
         brushData <- brushedPoints(case_df, input$stateBrush)
         brushData$EventDate <- brushData$EventDate %>% format(format = "%B %d, %Y")
-        return(state_dt <- datatable(brushData[,c(1,2,3)], colnames = c("Event Date", "Reported Cases", "Anticipated Cases",)))
+        return(state_dt <- datatable(brushData[,c(1,2,3)], 
+                                     colnames = c("Event Date", "Reported Cases", 
+                                                  "Anticipated Cases",)))
       }
     }
   })
@@ -229,7 +249,8 @@ server <- function(input, output, session) {
       if(is.null(input$countyClick$x)){
         initDT <- split_counties[[input$county]][nrow(split_counties[[input$county]]),c(1,2,3,7)]
         initDT$EventDate <- initDT$EventDate %>% format(format = "%B %d, %Y")
-        return(datatable(initDT, colnames = c("Event Date", "County", "Number of Cases", "Centered Average")))
+        return(datatable(initDT, colnames = c("Event Date", "County", 
+                                              "Number of Cases", "Centered Average")))
       }
       else if(is.null(input$countyBrush$xmin)) {
         lvls <- split_counties[[input$county]]$EventDate %>% 
@@ -238,19 +259,22 @@ server <- function(input, output, session) {
         dateTest <- lvls[round(input$countyClick$x-18261)]
         pointData <- split_counties[[input$county]][which(split_counties[[input$county]]$EventDate == dateTest), ]
         pointData$EventDate <- pointData$EventDate %>% format(format = "%B %d, %Y")
-        return(datatable(pointData[,c(1,2,3,7)], colnames = c("Event Date", "County", "Number of Cases", "Centered Average")))
+        return(datatable(pointData[,c(1,2,3,7)], colnames = c("Event Date", "County", 
+                                                              "Number of Cases", "Centered Average")))
       }
       else{
         brushData <- brushedPoints(split_counties[[input$county]], input$countyBrush)
         brushData$EventDate <- brushData$EventDate %>% format(format = "%B %d, %Y")
-        return(datatable(brushData[,c(1,2,3,7)], colnames = c("Event Date", "County", "Number of Cases", "Centered Average")))
+        return(datatable(brushData[,c(1,2,3,7)], colnames = c("Event Date", "County", 
+                                                              "Number of Cases", "Centered Average")))
       }
     }
     else{
       if(is.null(input$countyClick$x)){
         initDT <- split_counties[[input$county]][nrow(split_counties[[input$county]]),c(1,2,3)]
         initDT$EventDate <- initDT$EventDate %>% format(format = "%B %d, %Y")
-        return(datatable(initDT, colnames = c("Event Date", "County", "Number of Cases")))
+        return(datatable(initDT, colnames = c("Event Date", "County", 
+                                              "Number of Cases")))
       }
       else if(is.null(input$countyBrush$xmin)) {
         lvls <- split_counties[[input$county]]$EventDate %>% 
@@ -259,12 +283,14 @@ server <- function(input, output, session) {
         dateTest <- lvls[round(input$countyClick$x-18261)]
         pointData <- split_counties[[input$county]][which(split_counties[[input$county]]$EventDate == dateTest), ]
         pointData$EventDate <- pointData$EventDate %>% format(format = "%B %d, %Y")
-        return(datatable(pointData[,c(1,2,3)], colnames = c("Event Date", "County", "Number of Cases")))
+        return(datatable(pointData[,c(1,2,3)], colnames = c("Event Date", "County", 
+                                                            "Number of Cases")))
       }
       else{
         brushData <- brushedPoints(split_counties[[input$county]], input$countyBrush)
         brushData$EventDate <- brushData$EventDate %>% format(format = "%B %d, %Y")
-        return(datatable(brushData[,c(1,2,3)], colnames = c("Event Date", "County", "Number of Cases")))
+        return(datatable(brushData[,c(1,2,3)], colnames = c("Event Date", "County", 
+                                                            "Number of Cases")))
       }
     }
   })
