@@ -24,22 +24,12 @@ case_ev_plot$wknd_type <- factor(case_ev_plot$wknd_type,
 
 ylim_max <- max(case_ev_plot$n, pred_df$upCI, na.rm = T)
 
-#CREATE NEW DATA FRAME FOR INTERACTIVE PLOT DATA
-case_df <- case_ev_plot %>% filter(type == "n") %>%
-  select(EventDate, n)
-
-case_df <- left_join(case_df, case_ev_plot %>% filter(type == "pred") %>% select(EventDate, n), by = "EventDate") %>% 
-  rename(n = n.x, pred = n.y)
-
-case_df <- left_join(case_df, pred_df %>% select(EventDate, ma7_mean), by = "EventDate")
-
-case_df$pred <- case_df$pred %>% round(digits = 1)
-case_df$ma7_mean <- case_df$ma7_mean %>% round(digits = 1)
-
 ## STATE PLOT
 statePlot <- ggplot() +
-  geom_col(aes(x = EventDate, y = n, fill = wknd_type), data = case_ev_plot,
-           colour = "black", alpha = 0.9) +
+  geom_col(aes(x = EventDate, y = n, fill = wknd_type), 
+           data = case_ev_plot,
+           colour = "black",
+           alpha = 0.9) +
   geom_errorbar(aes(x = EventDate, ymin = loCI, ymax = upCI), data = pred_df, width = 0.25) +
   scale_fill_manual(name="", values=c("#FF7000", "#00A3FF", 
                                       "#813800", "#00588B"),
@@ -52,10 +42,10 @@ statePlot <- ggplot() +
   theme_bw() +
   theme(legend.position = "top", 
         plot.margin = margin(10, 30, 10, 10), 
-        legend.text = element_text(size = 12),
-        axis.text = element_text(size = 10), 
+        legend.text = element_text(size = 14),
+        axis.text = element_text(size = 13), 
         axis.title = element_text(size = 15), 
-        plot.caption = element_text(size = 12)) +
+        plot.caption = element_text(size = 13)) +
   labs(x = "Date", y = "Number of cases",
        caption = paste0("Data updated as of ", display_date))
 
