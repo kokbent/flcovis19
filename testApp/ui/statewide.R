@@ -2,7 +2,7 @@ tabPanel("Statewide Cases",
          fluidRow(
            column(12, align = "center",
                   h1("Number of Cases Statewide by Event Date"),
-                  h4(plotDisclaimer),
+                  h4(plotStateDisclaimer),
                   h4(plotClickInstr),
                   plotOutput("stateCases", 
                              width = "90%",

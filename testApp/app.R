@@ -40,7 +40,7 @@ ui <- tagList(
 server <- function(input, output, session) {
   source(file.path("server", "statewide.R"),  local = TRUE)$value
   source(file.path("server", "county.R"),  local = TRUE)$value
-  source(file.path("server", "region.R"),  local = TRUE)$value
+  # source(file.path("server", "region.R"),  local = TRUE)$value
 } 
 
 # RUN APPLICATION
