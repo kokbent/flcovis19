@@ -24,6 +24,18 @@ case_ev_plot$wknd_type <- factor(case_ev_plot$wknd_type,
 
 ylim_max <- max(case_ev_plot$n, pred_df$upCI, na.rm = T)
 
+#CREATE NEW DATA FRAME FOR INTERACTIVE PLOT DATA
+case_df <- case_ev_plot %>% filter(type == "n") %>%
+  select(EventDate, n)
+
+case_df <- left_join(case_df, case_ev_plot %>% filter(type == "pred") %>% select(EventDate, n), by = "EventDate") %>% 
+  rename(n = n.x, pred = n.y)
+
+case_df <- left_join(case_df, pred_df %>% select(EventDate, ma7_mean), by = "EventDate")
+
+case_df$pred <- case_df$pred %>% round(digits = 1)
+case_df$ma7_mean <- case_df$ma7_mean %>% round(digits = 1)
+
 ## STATE PLOT
 statePlot <- ggplot() +
   geom_col(aes(x = EventDate, y = n, fill = wknd_type), data = case_ev_plot,

@@ -5,7 +5,7 @@ library(tidyr)
 library(readr)
 library(lubridate)
 library(DT)
-library(shinyjs)
+#library(shinyjs)
 library(shinydashboard)
 library(shinyWidgets)
 library(cowplot)
@@ -15,20 +15,6 @@ library(plotly)
 source("dataImportClean.R")
 source("loadingMessages.R")
 source("text.R")
-
-appCSS <- "
-#loading {
-  position: absolute;
-  background: #DCDCDC;
-  opacity: 0.9;
-  z-index: 100;
-  left: 0;
-  right: 0;
-  height: 100%;
-  text-align: center;
-  color: #696969;
-}
-"
 
 # DATA INITIALIZATION
 getData() # Included dates stuff
@@ -43,19 +29,71 @@ source("plotsForStateCounties.R")
 # DEFINE UI
 ui <- tagList(
   useShinydashboard(),
-  useShinyjs(),
-  inlineCSS(appCSS),
-  div(
-    id = "loading",
-    h1("FLOVID-19 DATA VISUALIZER 9000"),
-    h2("LOADING"),
-    h3(loadingMessages[sample(1:239, 1, replace = FALSE)])
-  ),#div
-  
-  hidden(
-    div(
-      id = "hidden",
       navbarPage("FLovid-19 Data Visualizer 9000",
+                 tabPanel("Statewide Cases",
+                          fluidRow(
+                            column(12, align = "center",
+                                   h1("Number of Cases Statewide by Event Date"),
+                                   h4(plotDisclaimer),
+                                   h4(plotClickInstr),
+                                   plotOutput("stateCases", click = "stateClick", brush = brushOpts(id = "stateBrush", fill = "#ccc", direction = "x"))
+                            )#column
+                          ),#fluidRow
+                          fluidRow(
+                            column(1,
+                                   dropdownButton(inputId = "stateDropdown", label = "Options", up = TRUE, icon = icon("gear"), status = "primary",
+                                                  p("Toggle Smooth Line"),
+                                                  switchInput(inputId = "stateSmoothToggle", value = TRUE)
+                                    ),
+                              ),
+                            column(8, align = "center",
+                                   box(title = "Selected Statewide Plot Data", width = NULL, status = "primary", solidHeader = TRUE,
+                                       DT::DTOutput("stateInfo")
+                                     )#box
+                                   ),#column
+                            column(3, align = "center",
+                                   box(title = "Plot Information", width = NULL, status = "primary", solidHeader = TRUE,
+                                     p(strong("Event Date: "), "definition."),
+                                     p(strong("Number of Cases: "), "definition."),
+                                     p(strong("Trailing Average: "), "definition."),
+                                     p(strong("Centered Average: "), "definition.")
+                                     )#box
+                                   )#column
+                          )#fluidRow
+                 ),#tabPanel
+                 tabPanel("County-Level Cases",
+                          fluidRow(
+                            column(12, align = "center",
+                                   h1("Number of Cases in Selected County by Event Date"),
+                                   h4(plotDisclaimer),
+                                   h4(plotClickInstr),
+                                   h3("Select County"),
+                                   selectInput("county", label = "", choices = names(split_counties)),
+                                   plotOutput("countyCases", click = "countyClick", brush = brushOpts(id = "countyBrush", fill = "#ccc", direction = "x"))
+                            )#column
+                          ),#fluidRow
+                          fluidRow(
+                            column(1,
+                                   dropdownButton(inputId = "countyDropdown", label = "Options", up = TRUE, icon = icon("gear"), status = "primary",
+                                                  p("Toggle Smooth Line"),
+                                                  switchInput(inputId = "countySmoothToggle", value = TRUE)
+                                   ),
+                            ),
+                            column(8, align = "center",
+                                   box(title = "Selcted County-Level Plot Data", width = NULL, status = "primary", solidHeader = TRUE,
+                                       DT::DTOutput("countyInfo")
+                                   )#box
+                                  ),#column
+                            column(3, align = "center",
+                                   box(title = "Plot Information", width = NULL, status = "primary", solidHeader = TRUE,
+                                       p(strong("Event Date: "), "definition."),
+                                       p(strong("Number of Cases: "), "definition."),
+                                       p(strong("Trailing Average: "), "definition."),
+                                       p(strong("Centered Average: "), "definition.")
+                                       )#box
+                                   )#column
+                          )#fluidRow
+                 ),#tabPanel - INSERT AHCA CODE SECTION 2 HERE
                  tabPanel("About",
                           fluidRow(
                             column(12, align = "center",
@@ -79,71 +117,7 @@ ui <- tagList(
                                    )#box
                             )#column
                           )#fluidRow
-                  ),#tabPanel
-                 tabPanel("Statewide Cases",
-                          fluidRow(
-                            column(12, align = "center",
-                                   h1("Number of Cases Statewide by Event Date"),
-                                   h4("The shaded region represents data from the last 14 days and is likely to be revised"),
-                                   plotOutput("stateCases", click = "stateClick", brush = brushOpts(id = "stateBrush", fill = "#ccc", direction = "x")),
-                            )#column
-                          ),#fluidRow
-                          fluidRow(
-                            column(1,
-                                   dropdownButton(inputId = "stateDropdown", label = "Options", up = TRUE, icon = icon("gear"), status = "primary",
-                                                  p("Toggle Smooth Line"),
-                                                  switchInput(inputId = "stateSmoothToggle", value = TRUE)
-                                    ),
-                              ),
-                            column(8, align = "center",
-                                   box(title = "Selected Statewide Plot Data", width = NULL, status = "primary", solidHeader = TRUE,
-                                       p("Click on a column in the plot to see more information for that day."),
-                                       DT::DTOutput("stateInfo")
-                                     )#box
-                                   ),#column
-                            column(3, align = "center",
-                                   box(title = "Plot Information", width = NULL, status = "warning", solidHeader = TRUE,
-                                     p(strong("Event Date: "), "definition."),
-                                     p(strong("Number of Cases: "), "definition."),
-                                     p(strong("Trailing Average: "), "definition."),
-                                     p(strong("Centered Average: "), "definition.")
-                                     )#box
-                                   )#column
-                          )#fluidRow
-                 ),#tabPanel
-                 tabPanel("County-Level Cases",
-                          fluidRow(
-                            column(12, align = "center",
-                                   h1("Number of Cases in Selected County by Event Date"),
-                                   h4("The shaded region represents data from the last 14 days and is likely to be revised"),
-                                   h3("Select County"),
-                                   selectInput("county", label = "", choices = names(split_counties)),
-                                   plotOutput("countyCases", click = "countyClick", brush = brushOpts(id = "countyBrush", fill = "#ccc", direction = "x"))
-                            )#column
-                          ),#fluidRow
-                          fluidRow(
-                            column(1,
-                                   dropdownButton(inputId = "countyDropdown", label = "Options", up = TRUE, icon = icon("gear"), status = "primary",
-                                                  p("Toggle Smooth Line"),
-                                                  switchInput(inputId = "countySmoothToggle", value = TRUE)
-                                   ),
-                            ),
-                            column(8, align = "center",
-                                   box(title = "Selcted County-Level Plot Data", width = NULL, status = "primary", solidHeader = TRUE,
-                                       p("Click on a column in the plot to see more information for that day."),
-                                       DT::DTOutput("countyInfo")
-                                   )#box
-                                  ),#column
-                            column(3, align = "center",
-                                   box(title = "Plot Information", width = NULL, status = "warning", solidHeader = TRUE,
-                                       p(strong("Event Date: "), "definition."),
-                                       p(strong("Number of Cases: "), "definition."),
-                                       p(strong("Trailing Average: "), "definition."),
-                                       p(strong("Centered Average: "), "definition.")
-                                       )#box
-                                   )#column
-                          )#fluidRow
-                 )#tabPanel - INSERT AHCA CODE SECTION 2 HERE
+                 )#tabPanel
                  ## TODO - Smoothen this up
                  # tabPanel("Counties by Region",
                  #          fluidRow(
@@ -162,8 +136,6 @@ ui <- tagList(
                  #          )
                  # )#tabPanel
       )#navbarPage
-    )#div
-  )#hidden
 )#tagList
 
 # DEFINE SERVER
@@ -209,44 +181,44 @@ server <- function(input, output, session) {
   output$stateInfo <- renderDT({
     if(input$stateSmoothToggle == TRUE){
       if(is.null(input$stateClick$x)) {
-        initDT <- case_ev[nrow(case_ev),c(1,2,6)]
+        initDT <- case_df[nrow(case_df),c(1,2,3,4)]
         initDT$EventDate <- initDT$EventDate %>% format(format = "%B %d, %Y")
-        return(datatable(initDT, colnames = c("Event Date", "Number of Cases", "Centered Average")))
+        return(datatable(initDT, colnames = c("Event Date", "Reported Cases", "Anticipated Cases", "Centered Average")))
       }
       else if(is.null(input$stateBrush$xmin)) { 
-        lvls <- case_ev$EventDate %>% 
+        lvls <- case_df$EventDate %>% 
           factor() %>% 
           levels() 
-        dateTest <- lvls[round((input$stateClick$x)-18261)]
-        pointData <- case_ev[which(case_ev$EventDate == dateTest), ]
+        dateTest <- lvls[round((input$stateClick$x)-18321)]
+        pointData <- case_df[which(case_df$EventDate == dateTest), ]
         pointData$EventDate <- pointData$EventDate %>% format(format = "%B %d, %Y")
-        return(state_dt <- datatable(pointData[,c(1,2,6)], colnames = c("Event Date", "Number of Cases", "Centered Average")))
+        return(datatable(pointData[,c(1,2,3,4)], colnames = c("Event Date", "Reported Cases", "Anticipated Cases", "Centered Average")))
       }
       else{
-        brushData <- brushedPoints(case_ev, input$stateBrush)
+        brushData <- brushedPoints(case_df, input$stateBrush)
         brushData$EventDate <- brushData$EventDate %>% format(format = "%B %d, %Y")
-        return(state_dt <- datatable(brushData[,c(1,2,6)], colnames = c("Event Date", "Number of Cases", "Centered Average")))
+        return(datatable(brushData[,c(1,2,3,4)], colnames = c("Event Date", "Reported Cases", "Anticipated Cases", "Centered Average")))
       }
     }
     else{
       if(is.null(input$stateClick$x)) {
-        initDT <- case_ev[nrow(case_ev),c(1,2)]
+        initDT <- case_df[nrow(case_df),c(1,2,3)]
         initDT$EventDate <- initDT$EventDate %>% format(format = "%B %d, %Y")
-        return(datatable(initDT, colnames = c("Event Date", "Number of Cases")))
+        return(datatable(initDT, colnames = c("Event Date", "Reported Cases", "Anticipated Cases",)))
       }
       else if(is.null(input$stateBrush$xmin)) { 
-        lvls <- case_ev$EventDate %>% 
+        lvls <- case_df$EventDate %>% 
           factor() %>% 
           levels() 
         dateTest <- lvls[round((input$stateClick$x)-18261)]
-        pointData <- case_ev[which(case_ev$EventDate == dateTest), ]
+        pointData <- case_df[which(case_df$EventDate == dateTest), ]
         pointData$EventDate <- pointData$EventDate %>% format(format = "%B %d, %Y")
-        return(state_dt <- datatable(pointData[,c(1,2)], colnames = c("Event Date", "Number of Cases")))
+        return(state_dt <- datatable(pointData[,c(1,2,3)], colnames = c("Event Date", "Reported Cases", "Anticipated Cases",)))
       }
       else{
-        brushData <- brushedPoints(case_ev, input$stateBrush)
+        brushData <- brushedPoints(case_df, input$stateBrush)
         brushData$EventDate <- brushData$EventDate %>% format(format = "%B %d, %Y")
-        return(state_dt <- datatable(brushData[,c(1,2)], colnames = c("Event Date", "Number of Cases")))
+        return(state_dt <- datatable(brushData[,c(1,2,3)], colnames = c("Event Date", "Reported Cases", "Anticipated Cases",)))
       }
     }
   })
@@ -266,12 +238,12 @@ server <- function(input, output, session) {
         dateTest <- lvls[round(input$countyClick$x-18261)]
         pointData <- split_counties[[input$county]][which(split_counties[[input$county]]$EventDate == dateTest), ]
         pointData$EventDate <- pointData$EventDate %>% format(format = "%B %d, %Y")
-        county_dt <- datatable(pointData[,c(1,2,3,7)], colnames = c("Event Date", "County", "Number of Cases", "Centered Average"))
+        return(datatable(pointData[,c(1,2,3,7)], colnames = c("Event Date", "County", "Number of Cases", "Centered Average")))
       }
       else{
         brushData <- brushedPoints(split_counties[[input$county]], input$countyBrush)
         brushData$EventDate <- brushData$EventDate %>% format(format = "%B %d, %Y")
-        return(state_dt <- datatable(brushData[,c(1,2,3,7)], colnames = c("Event Date", "County", "Number of Cases", "Centered Average")))
+        return(datatable(brushData[,c(1,2,3,7)], colnames = c("Event Date", "County", "Number of Cases", "Centered Average")))
       }
     }
     else{
@@ -287,12 +259,12 @@ server <- function(input, output, session) {
         dateTest <- lvls[round(input$countyClick$x-18261)]
         pointData <- split_counties[[input$county]][which(split_counties[[input$county]]$EventDate == dateTest), ]
         pointData$EventDate <- pointData$EventDate %>% format(format = "%B %d, %Y")
-        county_dt <- datatable(pointData[,c(1,2,3)], colnames = c("Event Date", "County", "Number of Cases"))
+        return(datatable(pointData[,c(1,2,3)], colnames = c("Event Date", "County", "Number of Cases")))
       }
       else{
         brushData <- brushedPoints(split_counties[[input$county]], input$countyBrush)
         brushData$EventDate <- brushData$EventDate %>% format(format = "%B %d, %Y")
-        return(state_dt <- datatable(brushData[,c(1,2,3)], colnames = c("Event Date", "County", "Number of Cases")))
+        return(datatable(brushData[,c(1,2,3)], colnames = c("Event Date", "County", "Number of Cases")))
       }
     }
   })
@@ -308,10 +280,6 @@ server <- function(input, output, session) {
   # )
   
   #INSERT AHCA CODE SECTION 3 HERE
-  
-  Sys.sleep(3)
-  hide("loading", anim = TRUE, animType = "fade")
-  show("hidden")
 } 
 
 # RUN APPLICATION
