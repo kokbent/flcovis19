@@ -1,4 +1,5 @@
 #### THIS SCRIPT IS DESIGNED TO PROCESS DATA LOCALLY AND PASS DATA TO THE SHINY APP
+library(tidyverse)
 library(jsonlite)
 source("testApp/dataImportClean.R")
 
@@ -22,6 +23,11 @@ for (i in 1:nr) {
                  "ObjectId+>", start1[i], "+AND+ObjectId+<%3D+", stop1[i],
                  "&objectIds=&time=&resultType=standard&outFields=*&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&sqlFormat=none&f=pjson&token=")
   tmp <- fromJSON(url1, simplifyDataFrame = T)
+  while (!is.null(tmp$error)) {
+    print(paste0("API quota problem, retrying in 10s. ", i))
+    Sys.sleep(10)
+    tmp <- fromJSON(url1, simplifyDataFrame = T)
+  }
   ll <- bind_rows(ll, tmp$features$attributes)
 }
 

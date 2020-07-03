@@ -43,7 +43,8 @@ ui <- dashboardPage(
     sidebarMenu(
       menuItem("Statewide Cases", tabName = "statewide", icon = icon("dashboard"), 
                selected = T),
-      menuItem("County Cases", tabName = "county", icon = icon("dashboard"))
+      menuItem("County Cases", tabName = "county", icon = icon("dashboard")),
+      menuItem("About (Work In Progress)", tabName = "about", icon = icon("info"))
     ),
     br(),
     box(
@@ -58,7 +59,8 @@ ui <- dashboardPage(
   dashboardBody(
     tabItems(
       source(file.path("ui", "statewide.R"),  local = TRUE)$value,
-      source(file.path("ui", "county.R"),  local = TRUE)$value
+      source(file.path("ui", "county.R"),  local = TRUE)$value,
+      source(file.path("ui", "about.R"),  local = TRUE)$value
     )
   )
 )
