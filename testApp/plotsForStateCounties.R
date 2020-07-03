@@ -40,13 +40,12 @@ case_df$ma7_mean <- case_df$ma7_mean %>% round(digits = 1)
 statePlot <- ggplot() +
   geom_col(aes(x = EventDate, y = n, fill = wknd_type), 
            data = case_ev_plot,
-           colour = "black",
-           alpha = 0.9) +
+           alpha = 0.75) +
   geom_errorbar(aes(x = EventDate, ymin = loCI, ymax = upCI), data = pred_df, width = 0.25) +
   scale_fill_manual(name="", values=c("#FF7000", "#00A3FF", 
                                       "#813800", "#00588B"),
-                    labels=c("Weekday Anticipated", "Weekend Anticipated", 
-                             "Weekday Reported", "Weekend Reported")) +
+                    labels=c("", "Anticipated Cases (Weekday/Weekend)", 
+                             "", "Reported Cases (Weekday/Weekend)")) +
   scale_x_date(expand=c(0,0), date_breaks = "2 week", date_labels = "%b %d",
                limits = c(ymd("2020-02-29"), nowcast_date+ddays(1))) +
   scale_y_continuous(expand = c(0, 0), 
@@ -64,7 +63,7 @@ statePlot <- ggplot() +
 ## COUNTY PLOT
 countyPlot <- function(county){
   ggplot(split_counties[[county]]) +
-    geom_col(aes(x = EventDate, y = n, fill = as.factor(weekend)), colour = "black", alpha = 0.75) +
+    geom_col(aes(x = EventDate, y = n, fill = as.factor(weekend)), alpha = 0.75) +
     #geom_line(aes(x = EventDate, y = ma7), lwd = 1.2) +
     annotate("rect", xmin = ymd(effective_date), xmax = max(split_counties[[county]]$EventDate) + ddays(1), 
              ymin = -Inf, ymax = Inf, alpha = 0.5) +

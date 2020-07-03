@@ -1,6 +1,6 @@
 #RENDER COUNTY-LEVEL PLOTS
 output$countyCases <- renderCachedPlot({
-  if(input$countySmoothToggle == TRUE){
+  if(input$smoothToggle == TRUE){
     countyPlot(input$county) +
       geom_line(aes(x = EventDate, y = ca7), lwd = 1.2)
   } 
@@ -8,14 +8,14 @@ output$countyCases <- renderCachedPlot({
     countyPlot(input$county)
   }
 },
-cacheKeyExpr = { list(input$county, input$countySmoothToggle) }
+cacheKeyExpr = { list(input$county, input$smoothToggle) }
 )
 
 
 
 #RENDER COUNTY-LEVEL SELCECTED DATA
 output$countyInfo <- renderDT({
-  if(input$countySmoothToggle == TRUE){
+  if(input$smoothToggle == TRUE){
     if(is.null(input$countyClick$x)){
       initDT <- split_counties[[input$county]][nrow(split_counties[[input$county]]),c(1,2,3,7)]
       initDT$EventDate <- initDT$EventDate %>% format(format = "%B %d, %Y")

@@ -1,6 +1,6 @@
 # RENDER STATE PLOTS
 output$stateCases <- renderCachedPlot({
-  if(input$stateSmoothToggle == TRUE){
+  if(input$smoothToggle == TRUE){
     statePlot +
       geom_line(aes(x = EventDate, y = ma7_mean), data = pred_df, lwd = 1.1) +
       geom_ribbon(aes(x = EventDate, ymin = ma7_loCI, ymax = ma7_upCI), data = pred_df, alpha = 0.4)
@@ -9,12 +9,12 @@ output$stateCases <- renderCachedPlot({
     statePlot
   }
 },
-cacheKeyExpr = { list(input$stateSmoothToggle) }
+cacheKeyExpr = { list(input$smoothToggle) }
 )
 
 # RENDER STATE PLOT SELECTED DATA
 output$stateInfo <- renderDT({
-  if(input$stateSmoothToggle == TRUE){
+  if(input$smoothToggle == TRUE){
     if(is.null(input$stateClick$x)) {
       initDT <- case_df[nrow(case_df),c(1,2,3,4)]
       initDT$EventDate <- initDT$EventDate %>% format(format = "%B %d, %Y")
