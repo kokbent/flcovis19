@@ -54,5 +54,8 @@ caseCount(ll)
 write_csv(case_ev, "testApp/data/case_ev.csv")
 write_rds(split_counties, "testApp/data/split_counties.rds")
 
-#### BUILD HOSP-DEATH DATAFRAME
-source("hosp_death.R")
+#### BUILD TEST-HOSP-DEATH DATAFRAME
+source("test_hosp_death.R")
+
+#### BUILD COUNTY POSITIVITY DATAFRAME
+source("ct_pos.R")

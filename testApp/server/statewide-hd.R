@@ -1,5 +1,5 @@
 output$stateHosp <- renderPlotly(
-  plot_ly(HD_dat, 
+  plot_ly(THD_dat, 
           x = ~Date, 
           y = ~Hosp,
           type = "bar",
@@ -24,7 +24,7 @@ output$stateHosp <- renderPlotly(
 )
 
 output$stateDeath <- renderPlotly(
-  plot_ly(HD_dat, 
+  plot_ly(THD_dat, 
           x = ~Date, 
           y = ~Death,
           type = "bar",

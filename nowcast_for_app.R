@@ -3,7 +3,7 @@ library(lubridate)
 library(stringr)
 library(nimble)
 
-folder <- "C:/Users/kokbent/OneDrive - University of Florida/covid-fl-dat/"
+folder <- "../flovid19-data/linelist/"
 
 dating <- function (dt) {
   if (is.numeric(dt)) {

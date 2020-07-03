@@ -25,3 +25,7 @@ of cases event date, and currently reported numbers. Details about the model wil
 plotStateHospDisclaimer <- "Numbers inferred from DOH daily updates"
 
 plotStateDeathDisclaimer <- "Numbers inferred from DOH daily updates"
+
+plotStatePosDisclaimer <- "TO BE WRITTEN"
+
+plotCountyPosDisclaimer <- "The following plot takes some time to render, please wait..."
