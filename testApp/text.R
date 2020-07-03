@@ -11,7 +11,13 @@ eventDateDesc <- "Lab event date. Can be intepreted as sample collection date wi
 reportedCaseDesc <- "A reported case is case that has already been reported to the Florida DOH and its detail is publicly available."
 
 anticipatedCaseDesc <- "Reported number of cases on a particular event day may not be finalized because there can be significant delay between 
-sample collection and case confirmation: some may obtain their confirmed results as late as 14 days or more after sample collection. 
-We create a predictive model ('nowcasting model') that anticipated how many more positive cases could have their sample collected on a particular
-event date but has yet to be confirmed, based on past reporting trend and current numbers of reported cases. Anticipated numbers come with uncertainty,
-the 95% prediction interval, and is represented in the plot by the error bar."
+sample collection and case confirmation. We create a predictive model ('nowcasting model') that anticipates how many more positive cases could have their 
+sample collected on a particular event date but has yet to be confirmed. Anticipated numbers come with uncertainty, the 95% prediction interval is 
+represented in the plot by the error bar. Note that anticipated cases can be negative because numbers of cases can be revised downward."
+
+nowcastingDesc <- "Reported number of cases on a particular event day may not be finalized because there can be significant delay between 
+lab event (e.g. sample collection) and case confirmation. In recent days, the median number of days between lab event and case confirmation is
+around 3, and 90% of the cases were confirmed within 10 days after first lab event. Nevertheless, the lab event date of the report cases is 
+subjected to revision from day to day for up to 2 weeks or more after initial assignment. Our nowcasting model anticpates the number of cases
+at 14 days after the lab event day to serve as a guidance. This is done by accounting for the past trend in reporting delay trend, in daily revision
+of cases event date, and currently reported numbers. Details about the model will be made available in near future."

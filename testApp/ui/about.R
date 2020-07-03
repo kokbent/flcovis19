@@ -17,7 +17,9 @@ tabItem(tabName = "about",
           column(7, align = "center",
                  box(width = NULL, status = "primary",
                      h3("About This Hub"),
-                     p(aboutText)
+                     p(aboutText),
+                     h4("About Nowcasting Model"),
+                     p(nowcastingDesc)
                  )#box
           )#column
         )#fluidRow
