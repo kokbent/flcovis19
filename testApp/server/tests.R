@@ -1,7 +1,3 @@
-library(sf)
-library(plotly)
-library(leaflet)
-
 pal <- colorNumeric(palette = "RdYlBu", na.color = "#00000000", domain = c(0, 40),
                     reverse = T)
 
