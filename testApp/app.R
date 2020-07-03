@@ -18,6 +18,8 @@ source("text.R")
 
 # DATA INITIALIZATION
 getData() # Included dates stuff
+HD_dat <- read_csv("data/statewide-hosp-death.csv")
+HD_dat$Weekend <- ifelse(HD_dat$Weekend, "Weekend", "Weekday")
 
 # Codes and functions for plotting state and counties cases
 source("plotsForStateCounties.R")
@@ -40,10 +42,14 @@ ui <- dashboardPage(
   dashboardHeader(title = "FLovid-19 Data Visualizer 9000",
                   titleWidth = 320),
   dashboardSidebar(
+    width = 270,
     sidebarMenu(
       menuItem("Statewide Cases", tabName = "statewide", icon = icon("dashboard"), 
                selected = T),
       menuItem("County Cases", tabName = "county", icon = icon("dashboard")),
+      menuItem("Hospitalization and Death (Beta)", 
+               tabName = "statewide-hd", 
+               icon = icon("hospital-symbol")),
       menuItem("About (Work In Progress)", tabName = "about", icon = icon("info"))
     ),
     br(),
@@ -60,6 +66,7 @@ ui <- dashboardPage(
     tabItems(
       source(file.path("ui", "statewide.R"),  local = TRUE)$value,
       source(file.path("ui", "county.R"),  local = TRUE)$value,
+      source(file.path("ui", "statewide-hd.R"),  local = TRUE)$value,
       source(file.path("ui", "about.R"),  local = TRUE)$value
     )
   )
@@ -69,6 +76,7 @@ ui <- dashboardPage(
 server <- function(input, output, session) {
   source(file.path("server", "statewide.R"),  local = TRUE)$value
   source(file.path("server", "county.R"),  local = TRUE)$value
+  source(file.path("server", "statewide-hd.R"),  local = TRUE)$value
   # source(file.path("server", "region.R"),  local = TRUE)$value
 } 
 

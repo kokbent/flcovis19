@@ -53,3 +53,6 @@ caseCount(ll)
 #### EXPORT THE TWO FILES TO SHINY APP
 write_csv(case_ev, "testApp/data/case_ev.csv")
 write_rds(split_counties, "testApp/data/split_counties.rds")
+
+#### BUILD HOSP-DEATH DATAFRAME
+source("hosp_death.R")

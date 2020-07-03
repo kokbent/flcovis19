@@ -6,7 +6,11 @@ tabItem(tabName = "county",
                  h4(plotClickInstr),
                  h3("Select County"),
                  selectInput("county", label = "", choices = names(split_counties)),
-                 plotOutput("countyCases", click = "countyClick", brush = brushOpts(id = "countyBrush", fill = "#dfd", direction = "x"))
+                 plotOutput("countyCases", 
+                            width = "90%",
+                            height = "500px",
+                            click = "countyClick", 
+                            brush = brushOpts(id = "countyBrush", fill = "#dfd", direction = "x"))
           )#column
         ),#fluidRow
         hr(),

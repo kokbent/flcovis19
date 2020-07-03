@@ -21,3 +21,7 @@ around 3, and 90% of the cases were confirmed within 10 days after first lab eve
 subjected to revision from day to day for up to 2 weeks or more after initial assignment. Our nowcasting model anticpates the number of cases
 at 14 days after the lab event day to serve as a guidance. This is done by accounting for the past trend in reporting delay trend, in daily revision
 of cases event date, and currently reported numbers. Details about the model will be made available in near future."
+
+plotStateHospDisclaimer <- "Numbers inferred from DOH daily updates"
+
+plotStateDeathDisclaimer <- "Numbers inferred from DOH daily updates"
