@@ -44,7 +44,10 @@ source("nowcast_for_app.R")
 
 #### BUILD CASE-DATE DATAFRAME
 ## Case-Date DF is much smaller (save space)
+ll <- read.csv("data/linelist.csv")
 colnames(ll)[1] <- "County" # Causing problem in my computer...
+ll$EventDate <- ymd_hms(ll$EventDate) %>% as.Date
+ll$ChartDate <- ymd_hms(ll$ChartDate) %>% as.Date
 caseCount(ll)
 
 #### EXPORT THE TWO FILES TO SHINY APP
