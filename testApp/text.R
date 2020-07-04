@@ -28,4 +28,4 @@ plotStateDeathDisclaimer <- "Numbers inferred from DOH daily updates"
 
 plotStatePosDisclaimer <- "TO BE WRITTEN"
 
-plotCountyPosDisclaimer <- "The following plot takes some time to render, please wait..."
+plotCountyPosDisclaimer <- "TO BE WRITTEN"
