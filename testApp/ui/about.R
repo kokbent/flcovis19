@@ -11,7 +11,7 @@ tabItem(tabName = "about",
           column(5, align = "center",
                  box(width = NULL, status = "primary",
                      h3("Hladish Lab Contributors"),
-                     p(aboutText)
+                     p(contributorsText)
                  )#box
           ),#column
           column(7, align = "center",
