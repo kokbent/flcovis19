@@ -8,7 +8,7 @@ colnames/col_counts.csv
 
 # keep input directory only with compressed input data
 input/*
-!input/partial_hosp_data.tgz
+!input/.gitkeep
 
 #keep blank output directory
 output/*
