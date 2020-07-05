@@ -1,0 +1,15 @@
+# excludes unnecessary files in home directory
+.DS_Store
+.Rhistory
+
+# excludes unnecessary files in colnames
+colnames/col_compare.csv
+colnames/col_counts.csv
+
+# keep blank input directory
+input/*
+!input/partial_hosp_data.tgz
+
+#keep blank output directory
+output/*
+!output/.gitkeep

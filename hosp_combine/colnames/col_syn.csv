@@ -1,0 +1,61 @@
+﻿existing,rename
+Adult ICU Census,Adult ICU Census
+Adult Med Surg Census,Adult Med Surg Census
+Available Adult ICU,Available Adult ICU
+Available Adult MedSurg,Available Adult MedSurg
+Available Burn Care,Available Burn Care
+Available Isolation Beds,Available Isolation Beds
+Available LDRP,Available LDRP
+Available Pediatric ICU,Available Pediatric ICU
+Available Pediatric MedSurg,Available Pediatric MedSurg
+Burn Care Census,Burn Care Census
+COVID IN ICU,COVID IN ICU
+COVID NON ICU,COVID NON ICU
+COVID ON VENT,COVID ON VENT
+County,County
+General Acute Care Census,General Acute Care Census
+Icu Over 65,Icu Over 65
+Icu Under 65,Icu Under 65
+Isolation Bed Census,Isolation Bed Census
+LDRP Census,LDRP Census
+Licensed Beds,Licensed Beds
+Pediatric ICU Census,Pediatric ICU Census
+Pediatric Med Surg Census,Pediatric Med Surg Census
+Staff Adult ICU,Staff Adult ICU
+Staff Adult MedSurg,Staff Adult MedSurg
+Staff Burn Care,Staff Burn Care
+Staff General Acute Care,Staff General Acute Care
+Staff Isolation Beds,Staff Isolation Beds
+Staff LDRP,Staff LDRP
+Staff Pediatric ICU ,Staff Pediatric ICU 
+Staff Pediatric MedSurg,Staff Pediatric MedSurg
+Vent Onsite,Vent Onsite
+COVID + Admits Day Before,COVID Admissions Day Before
+COVID ADMIT,COVID Admissions Day Before
+COVID + Disch Day Before,COVID Discharges Day Before
+COVID DISCH,COVID Discharges Day Before
+DOH FIPS Code,FIPS Code
+FIPS Codes,FIPS Code
+Available General AcuteCare,Available General AcuteCare
+AvailableGeneralAcuteCare,Available General AcuteCare
+COVID+ Hospitalized,COVID Hospitalized
+COVID In Hospital,COVID Hospitalized
+Vents from Converted Anesthesia Machines,Vents from Converted Anesthesia Machines
+Total Census/Patients,Total Census
+ Total Census/Patients,Total Census
+Overall Provider Census,Total Census
+Vents Currently In Use (All),Vents In Use
+ Total Available Beds from Availability Screen,Total Available Beds from Availability Screen
+ Total Available Beds form Availability Screen,Total Available Beds from Availability Screen
+Total Available Beds form Availability Screen,Total Available Beds from Availability Screen
+Total Available Beds from Availability Screen,Total Available Beds from Availability Screen
+COVID + Admits from LTCFs Day Before,COVID LTCF Admissions Day Before
+PUI to + Day Before,PUI To POS Day Before
+COVID FL HOS TRNSFR,COVID FL Hospital Transfer
+COVID NON FL HOS TRNSFR,COVID NON FL Hospital Transfer
+Vent Available,Vents Available
+CNVRT ANS VENT,Possible Anesthesia To Vent
+CNVRT TO ICU,Possible Bed to ICU
+LTCF Ready Patients,LTCF Ready Patients
+COVID PUI,COVID PUI
+Total Available Beds,Total Available Beds
