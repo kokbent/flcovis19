@@ -1,6 +1,6 @@
 aboutText <- "To be completed."
 
-contributorsText <- cat(paste("Thomas Hladish, Ph.D., Department of Biology, and the Emerging Pathogens Institute, University of Florida, Gainesville, USA", "Arlin Stoltzfus, Ph.D., National Institute of Standards and Technology", "Kok Ben Toh, M.Sc., School of Natural Resources and Environment, University of Florida, Gainesville, USA", "Sanjana Bhargava, B.S., University of Florida, Gainesville, USA", "Alexander Pillai,  Microbiology major, University of Florida, Gainesville, USA", "Dianela Perdomo, Biology major, University of Florida, Gainesville, USA", sep="\n"))
+#contributorsText <- cat(paste("Thomas Hladish, Ph.D., Department of Biology, and the Emerging Pathogens Institute, University of Florida, Gainesville, USA", "Arlin Stoltzfus, Ph.D., National Institute of Standards and Technology", "Kok Ben Toh, M.Sc., School of Natural Resources and Environment, University of Florida, Gainesville, USA", "Sanjana Bhargava, B.S., University of Florida, Gainesville, USA", "Alexander Pillai,  Microbiology major, University of Florida, Gainesville, USA", "Dianela Perdomo, Biology major, University of Florida, Gainesville, USA", sep="\n"))
 
 plotStateDisclaimer <- "See \"Plot Information\" below or \"About\" page for more information on how case numbers are reported and anticipated."
 

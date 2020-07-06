@@ -101,6 +101,7 @@ server <- function(input, output, session) {
   source(file.path("server", "county.R"),  local = TRUE)$value
   source(file.path("server", "statewide-hd.R"),  local = TRUE)$value
   source(file.path("server", "tests.R"),  local = TRUE)$value
+  source(file.path("server", "about.R"),  local = TRUE)$value
   # source(file.path("server", "region.R"),  local = TRUE)$value
 } 
 
