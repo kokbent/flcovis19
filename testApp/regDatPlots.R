@@ -55,7 +55,7 @@ reg_Plot <- function(regionNum){
     scale_y_continuous(expand = c(0, 0), limits = c(0, max(reg_listFilter[[regionNum]]$n) + (0.1*max(reg_listFilter[[regionNum]]$n)))) +
     theme_bw() +
     theme(legend.position = "top", plot.margin = margin(10, 30, 10, 10)) +
-    labs(x = "Date", y = "Number of cases", 
+    labs(x = "Date", y = "Reported cases", 
          title = paste0("Aggregate Number of Cases in Region ", regionNum, " by Event Date"),
          subtitle = "The shaded region represents data from the last 14 days and is likely to be revised",
          caption = paste0("Data updated as of ", display_date))

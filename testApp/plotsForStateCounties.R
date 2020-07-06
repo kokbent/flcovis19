@@ -44,8 +44,8 @@ statePlot <- ggplot() +
   geom_errorbar(aes(x = EventDate, ymin = loCI, ymax = upCI), data = pred_df, width = 0.25) +
   scale_fill_manual(name="", values=c("#FF7000", "#00A3FF", 
                                       "#813800", "#00588B"),
-                    labels=c("", "Anticipated Cases (Weekday/Weekend)", 
-                             "", "Reported Cases (Weekday/Weekend)")) +
+                    labels=c("", "Anticipated cases (weekday, weekend)", 
+                             "", "Reported cases (weekday, weekend)")) +
   scale_x_date(expand=c(0,0), date_breaks = "2 week", date_labels = "%b %d",
                limits = c(ymd("2020-02-29"), nowcast_date+ddays(1))) +
   scale_y_continuous(expand = c(0, 0), 
@@ -57,7 +57,7 @@ statePlot <- ggplot() +
         axis.text = element_text(size = 13), 
         axis.title = element_text(size = 15), 
         plot.caption = element_text(size = 13)) +
-  labs(x = "Date", y = "Number of cases",
+  labs(x = "Event date", y = "Reported cases",
        caption = paste0("Data updated as of ", display_date))
 
 ## COUNTY PLOT
@@ -67,7 +67,7 @@ countyPlot <- function(county){
     #geom_line(aes(x = EventDate, y = ma7), lwd = 1.2) +
     annotate("rect", xmin = ymd(effective_date), xmax = max(split_counties[[county]]$EventDate) + ddays(1), 
              ymin = -Inf, ymax = Inf, alpha = 0.5) +
-    scale_fill_manual(name = "", labels = c("Weekday", "Weekend"),
+    scale_fill_manual(name = "", labels = c("weekday", "weekend"),
                       values = c("#D55E00", "#0072B2")) +
     scale_x_date(expand=c(0,0), date_breaks = "1 week", date_labels = "%b %d",
                  limits = c(ymd("2020-02-29"), max(split_counties[[county]]$EventDate)+ddays(1))) +
@@ -75,6 +75,6 @@ countyPlot <- function(county){
     theme_bw() +
     theme(legend.position = "top", plot.margin = margin(10, 30, 10, 10), legend.text = element_text(size = 15, face = "bold"), 
           axis.text = element_text(size = 10), axis.title = element_text(size = 15), plot.caption = element_text(size = 12)) +
-    labs(x = "Date", y = "Number of cases",
+    labs(x = "Event date", y = "Reported cases",
          caption = paste0("Data updated as of ", display_date))
 }
