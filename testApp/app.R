@@ -46,19 +46,19 @@ options(DT.options = list(searching = FALSE))
 # )#tagList
 
 ui <- dashboardPage(
-  dashboardHeader(title = "FLovid-19 Data Visualizer 9000",
+  dashboardHeader(title = "Florida COVID-19 data visualizer",
                   titleWidth = 320),
   dashboardSidebar(
     width = 270,
     sidebarMenu(
-      menuItem("Statewide Cases", 
+      menuItem("Statewide cases", 
                tabName = "statewide", 
                icon = icon("dashboard"), 
                selected = T),
-      menuItem("County Cases", 
+      menuItem("County cases", 
                tabName = "county", 
                icon = icon("dashboard")),
-      menuItem("Hospitalization and Death", 
+      menuItem("Hospitalization and death", 
                tabName = "statewide-hd", 
                icon = icon("hospital-symbol"),
                badgeLabel = "beta",

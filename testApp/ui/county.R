@@ -1,10 +1,10 @@
 tabItem(tabName = "county",
         fluidRow(
           column(12, align = "center",
-                 h1("Number of Cases in Selected County by Event Date"),
+                 h1("Reported cases for selected county"),
                  h4(plotCountyDisclaimer),
                  h4(plotClickInstr),
-                 h3("Select County"),
+                 h3("Select county"),
                  selectInput("county", label = "", choices = names(split_counties)),
                  plotOutput("countyCases", 
                             width = "90%",
@@ -16,16 +16,16 @@ tabItem(tabName = "county",
         hr(),
         fluidRow(
           column(8, align = "center",
-                 box(title = "Selcted County-Level Plot Data", width = NULL, status = "primary", solidHeader = TRUE,
+                 box(title = "Selected data (use mouse to select from plot above)", width = NULL, status = "primary", solidHeader = TRUE,
                      DT::DTOutput("countyInfo")
                  )#box
           ),#column
           column(4, align = "center",
-                 box(title = "Plot Information", width = NULL, status = "primary", solidHeader = TRUE,
-                     p(strong("Event Date: "), "definition."),
-                     p(strong("Number of Cases: "), "definition."),
-                     p(strong("Trailing Average: "), "definition."),
-                     p(strong("Centered Average: "), "definition.")
+                 box(title = "Plot details", width = NULL, status = "primary", solidHeader = TRUE,
+                     p(strong("Event date: "), "definition."),
+                     p(strong("Reported cases: "), "definition."),
+                     # p(strong("Trailing average: "), "definition."),
+                     p(strong("Centered average: "), "definition.")
                  )#box
           )#column
         )#fluidRow

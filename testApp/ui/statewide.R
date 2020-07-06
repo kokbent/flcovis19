@@ -1,7 +1,7 @@
 tabItem(tabName = "statewide",
         fluidRow(
           column(12, align = "center",
-                 h1("Number of Cases Statewide by Event Date"),
+                 h1("Reported cases for Florida"),
                  h4(plotStateDisclaimer),
                  h4(plotClickInstr),
                  plotOutput("stateCases", 
@@ -17,7 +17,7 @@ tabItem(tabName = "statewide",
         fluidRow(
           column(8, 
                  align = "center",
-                 box(title = "Selected Statewide Plot Data", 
+                 box(title = "Selected data (use mouse to select from plot above)", 
                      width = NULL, 
                      status = "primary", 
                      solidHeader = TRUE,
@@ -26,14 +26,14 @@ tabItem(tabName = "statewide",
           ),#column
           column(4, 
                  align = "center",
-                 box(title = "Plot Information", 
+                 box(title = "Plot details", 
                      width = NULL, 
                      status = "primary", 
                      solidHeader = TRUE,
-                     p(strong("Event Date: "), eventDateDesc),
+                     p(strong("Event date: "), eventDateDesc),
                      # p(strong("Number of Cases: "), "definition."),
-                     p(strong("Reported case: "), reportedCaseDesc),
-                     p(strong("Anticipated case: "), anticipatedCaseDesc)
+                     p(strong("Reported cases: "), reportedCaseDesc),
+                     p(strong("Anticipated cases: "), anticipatedCaseDesc)
                  )#box
           )#column
         )
