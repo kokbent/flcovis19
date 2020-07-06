@@ -73,8 +73,10 @@ constants <- list(N = nrow(dat_train),
 
 data <- list(y = dat_train$n,
              hol = as.numeric(dat_train$hol))
-inits <- list(alpha = rep(0, constants$NED), beta = rep(0, constants$NRD), delta = 0,
-              gamma = matrix(0, constants$NED, constants$NRD), phi = 5,
+inits <- list(alpha = rep(0, constants$NED), 
+              beta = rep(0, constants$NRD), 
+              delta = 0,
+              phi = 5,
               eta = matrix(0, constants$NRD, constants$NREPL))
 
 source("nowcast_nb_JAGS_v2.R")
@@ -83,7 +85,6 @@ system.time(model <- nimbleModel(code, constants = constants, data = data, inits
 
 conf <- configureMCMC(model, 
                       monitors = c("mu0", "alpha", "beta", 
-                                   # "gamma", 
                                    "eta", "phi", "delta"))
 mcmc <- buildMCMC(conf)
 modelc <- compileNimble(model)
@@ -91,19 +92,19 @@ mcmcc <- compileNimble(mcmc)
 # Uncomment for quick sanity check
 # samp <- runMCMC(mcmcc, niter = 5000, nburnin = 2500, thin = 1, nchains = 3,
 #                 progressBar = T, samples = T, samplesAsCodaMCMC = T)
-samp <- runMCMC(mcmcc, niter = 100000, nburnin = 50000, thin = 10, nchains = 3,
-                setSeed = c(4326, 4327, 4328), progressBar = T,
+samp <- runMCMC(mcmcc, niter = 100000, nburnin = 50000, thin = 10, nchains = 1,
+                setSeed = 4342024, progressBar = T,
                 samples = T, samplesAsCodaMCMC = T)
 
 # summ <- MCMCvis::MCMCsummary(samp)
 
 
 #### Extract Posterior Samples
-pos <- do.call(rbind, samp)
+# pos <- do.call(rbind, samp)
+pos <- samp
 pos_mu <- pos[,"mu0"]
 pos_alpha <- pos[,str_detect(colnames(pos), "alpha")]
 pos_beta <- pos[,str_detect(colnames(pos), "beta")]
-# pos_gamma <- pos[,str_detect(colnames(pos), "gamma")]
 pos_eta <- pos[,str_detect(colnames(pos), "^eta")]
 pos_delta <- pos[,str_detect(colnames(pos), "delta")]
 pos_phi <- pos[,"phi"]
@@ -199,8 +200,6 @@ pred_df <- data.frame(EventDate = case_rt_test$EventDate,
                       loCI = apply(pred_mat, 2, quantile, 0.025),
                       upCI = apply(pred_mat, 2, quantile, 0.975))
 pred_df <- left_join(pred_df, case_actual)
-# pred_df$loCI <- pred_df$loCI + pred_df$n
-# pred_df$upCI <- pred_df$upCI + pred_df$n
 
 ## 7-day Moving Average
 ma7_mat <- matrix(NA, n_pos, nrow(case_actual))
@@ -208,6 +207,11 @@ for (i in 1:n_pos) {
   ts_n <- c(case_actual$n[1:(nrow(case_actual) - nrow(case_rt_test))],
             pred_mat[i,])
   ma7_mat[i,] <- stats::filter(ts_n, rep(1/7, 7), sides = 2)
+  
+  # Exceptions for the tail
+  ma7_mat[i, nrow(case_actual) - 2] <- mean(ts_n[(nrow(case_actual)-5):nrow(case_actual)])
+  ma7_mat[i, nrow(case_actual) - 1] <- mean(ts_n[(nrow(case_actual)-4):nrow(case_actual)])
+  ma7_mat[i, nrow(case_actual)] <- mean(ts_n[(nrow(case_actual)-3):nrow(case_actual)])
 }
 
 ma7_df <- data.frame(EventDate = case_actual$EventDate,
@@ -217,6 +221,7 @@ ma7_df <- data.frame(EventDate = case_actual$EventDate,
 cond <- ma7_df$loCI ==  ma7_df$upCI
 ma7_df$loCI[cond] <- NA
 ma7_df$upCI[cond] <- NA
+
 
 #### Graphing
 ggplot() +
