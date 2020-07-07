@@ -12,9 +12,9 @@ setGlobalDates <- function(date, setbackDate = 14) {
 getData <- function(){
   
   #PULL DATA FROM STORAGE (NEED TO RE-UPDATE LOCALLY EVERYDAY)
-  #USING case_ev and county_ct IN NEW VERSION
   case_ev <<- read.csv("data/case_ev.csv")
   split_counties <<- readRDS("data/split_counties.rds")
+  pred_df <<- read_csv("data/statewide-nowcast-preds.csv") # Nowcasting
   
   case_ev$EventDate <<- ymd(case_ev$EventDate)
   
@@ -74,4 +74,13 @@ dateAvgFill <- function(){
     split_counties[[i]]$ca7 <<- stats::filter(split_counties[[i]]$n, rep(1/7, 7), sides = 2)
     
   }
+}
+
+#MODEBAR CONFIG FOR PLOTLY (STANDARDIZING IT EVERYWHERE)
+plotly_conf <- function (p) {
+  config(
+    p,
+    modeBarButtonsToRemove = c("select2d", "lasso2d", "zoomIn2d", "zoomOut2d",
+                               "toggleSpikelines")
+  )
 }

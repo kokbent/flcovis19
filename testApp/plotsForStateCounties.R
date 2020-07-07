@@ -1,73 +1,92 @@
-pred_df <- read_csv("data/statewide-nowcast-preds.csv")
-
+## STATEPLOT DATA CARPENTRY
 pred_nowcast <- pred_df %>%
   select(EventDate, n, pred, loCI, upCI) %>%
   filter(!is.na(n))
 nowcast_date <- max(pred_df$EventDate)
 
+# MANIPULATE ACTUAL DATA
 case_ev_plot <- case_ev %>%
   filter(EventDate >= ymd("2020-03-01"), EventDate <= nowcast_date) %>%
   select(-day, -ma7, -ca7)
 case_ev_plot <- left_join(case_ev_plot, pred_nowcast %>% select(EventDate, pred))
 
-#PIVOT TO LONG FORM FOR PLOTTING
-case_ev_plot <- case_ev_plot %>%
-  pivot_longer(-c("EventDate", "weekend"), 
-               names_to = "type", 
-               values_to = "n", 
-               values_drop_na = T)
-case_ev_plot$type <- factor(case_ev_plot$type, levels=c("pred", "n"))
-case_ev_plot$wknd_type <- paste(as.numeric(case_ev_plot$weekend), 
-                                case_ev_plot$type)
-case_ev_plot$wknd_type <- factor(case_ev_plot$wknd_type,
-                                     levels = c("0 pred", "1 pred", "0 n", "1 n"))
+# PRED MANIPULATE FOR PLOTLY
+pred_df$upCI2 <- with(pred_df, upCI - n + pred)
+pred_df$loCI2 <- with(pred_df, n + pred - loCI)
+pred_df1 <- pred_df %>%
+  filter(!is.na(pred))
 
-ylim_max <- max(case_ev_plot$n, pred_df$upCI, na.rm = T)
-
-#CREATE NEW DATA FRAME FOR INTERACTIVE PLOT DATA
-case_df <- case_ev_plot %>% 
-  filter(type == "n") %>%
-  select(EventDate, n)
-
-case_df <- left_join(case_df, 
-                     case_ev_plot %>% 
-                       filter(type == "pred") %>% 
-                       select(EventDate, n), by = "EventDate") %>% 
-  rename(n = n.x, pred = n.y)
-
-case_df <- left_join(case_df, 
-                     pred_df %>% 
-                       select(EventDate, ma7_mean), 
-                     by = "EventDate")
-
-case_df$pred <- case_df$pred %>% 
-  round(digits = 1)
-case_df$ma7_mean <- case_df$ma7_mean %>% 
-  round(digits = 1)
-
-## STATE PLOT
-statePlot <- ggplot() +
-  geom_col(aes(x = EventDate, y = n, fill = wknd_type), 
+## STATEPLOT
+# LAYERS
+statePlot <- plot_ly() %>%
+  add_bars(x = ~EventDate,
+           y = ~n,
+           color = ~as.factor(weekend),
+           colors = c("#0072B2", "#56b4e9"),
+           name = ~ifelse(weekend, "Weekend Reported", "Weekday, "),
            data = case_ev_plot,
-           alpha = 0.75) +
-  geom_errorbar(aes(x = EventDate, ymin = loCI, ymax = upCI), data = pred_df, width = 0.25) +
-  scale_fill_manual(name="", values=c("#FF7000", "#00A3FF", 
-                                      "#813800", "#00588B"),
-                    labels=c("", "Anticipated cases (weekday, weekend)", 
-                             "", "Reported cases (weekday, weekend)")) +
-  scale_x_date(expand=c(0,0), date_breaks = "2 week", date_labels = "%b %d",
-               limits = c(ymd("2020-02-29"), nowcast_date+ddays(1))) +
-  scale_y_continuous(expand = c(0, 0), 
-                     limits = c(0, ylim_max + 100)) +
-  theme_bw() +
-  theme(legend.position = "top", 
-        plot.margin = margin(10, 30, 10, 10), 
-        legend.text = element_text(size = 14),
-        axis.text = element_text(size = 13), 
-        axis.title = element_text(size = 15), 
-        plot.caption = element_text(size = 13)) +
-  labs(x = "Event date", y = "Reported cases",
-       caption = paste0("Data updated as of ", display_date))
+           text = ~paste('<b>', EventDate, '</b></br>', 
+                         '</br>Reported cases (to date): ', n),
+           hoverinfo = "text") %>%
+  add_bars(x = ~EventDate,
+           y = ~(pred + n),
+           name = 'Anticipated total',
+           error_y = list(type = "data",
+                          symmetric = F,
+                          array = ~upCI2, 
+                          arrayminus = ~loCI2,
+                          color = "d55e00",
+                          thickness = 1.5,
+                          width = 1.5),
+           marker = list(color = "#88888811",
+                         line = list(color = "#d55e00",
+                                     width = 1.5)),
+           data = pred_df1,
+           text = ~paste('<b>', EventDate, '</b></br>', 
+                         '</br>Anticipated Total:', round(pred + n),
+                         '(', round(loCI), '-', round(upCI), ')'),
+           hoverinfo = "text") %>%
+  add_lines(x = ~EventDate,
+            y = ~ma7_mean,
+            data = pred_df,
+            line = list(color = "black"),
+            name = '7-day moving average (centered)',
+            hoverinfo = "none",
+            visible = "legendonly")
+
+# LAYOUT AND CONFIG
+statePlot <- statePlot %>%
+  layout(
+    legend = list(orientation = "h",
+                  x = 0.5, y = 1,
+                  xanchor = "center"),
+    
+    xaxis = list(
+      title = "",
+      rangeselector = list(
+        buttons = list(
+          list(
+            count = 1,
+            label = "1 mo",
+            step = "month",
+            stepmode = "backward"),
+          list(
+            count = 2,
+            label = "2 mo",
+            step = "month",
+            stepmode = "backward"),
+          list(step = "all"))),
+      
+      rangeslider = list(type = "date")),
+    
+    yaxis = list(title = "Reported Case",
+                 range = c(0, max(pred_df1$upCI, na.rm = T)*1.1)),
+    
+    barmode = "overlay",
+    
+    hovermode = "compare"
+  ) %>%
+  plotly_conf()
 
 ## COUNTY PLOT
 countyPlot <- function(county){

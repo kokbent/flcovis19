@@ -14,8 +14,8 @@ library(plotly)
 library(leaflet)
 
 # IMPORT DATA INITIALIZATION FUNCTIONS
-source("dataImportClean.R")
-source("loadingMessages.R")
+source("functions.R")
+#source("loadingMessages.R")
 source("text.R")
 
 # DATA INITIALIZATION

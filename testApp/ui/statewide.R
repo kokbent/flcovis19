@@ -4,13 +4,9 @@ tabItem(tabName = "statewide",
                  h1("Reported cases for Florida"),
                  h4(plotStateDisclaimer),
                  h4(plotClickInstr),
-                 plotOutput("stateCases", 
-                            width = "90%",
-                            height = "500px",
-                            click = "stateClick", 
-                            brush = brushOpts(id = "stateBrush", 
-                                              fill = "#dfd", 
-                                              direction = "x"))
+                 plotlyOutput("stateCases", 
+                              width = "90%",
+                              height = "600px")
           )#column
         ),#fluidRow
         hr(),
