@@ -1,7 +1,7 @@
 #### THIS SCRIPT IS DESIGNED TO PROCESS DATA LOCALLY AND PASS DATA TO THE SHINY APP
 library(tidyverse)
 library(jsonlite)
-source("testApp/dataImportClean.R")
+source("testApp/functions.R")
 
 #### DATA MATTER
 ## Update your linelist -> "data/linelist.csv"
