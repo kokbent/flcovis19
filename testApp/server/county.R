@@ -18,6 +18,7 @@ output$countyInfo <- renderDT({
   if(input$smoothToggle == TRUE){
     if(is.null(input$countyClick$x)){
       initDT <- split_counties[[input$county]][nrow(split_counties[[input$county]]),c(1,2,3,7)]
+      initDT$ca7 <- initDT$ca7 %>% round(digits = 1)
       initDT$EventDate <- initDT$EventDate %>% format(format = "%B %d, %Y")
       return(datatable(initDT, colnames = c("Event date", "County", 
                                             "Reported cases", "Centered average")))
@@ -29,12 +30,14 @@ output$countyInfo <- renderDT({
       dateTest <- lvls[round(input$countyClick$x-18261)]
       pointData <- split_counties[[input$county]][which(split_counties[[input$county]]$EventDate == dateTest), ]
       pointData$EventDate <- pointData$EventDate %>% format(format = "%B %d, %Y")
+      pointData$ca7 <- pointData$ca7 %>% round(digits = 1)
       return(datatable(pointData[,c(1,2,3,7)], colnames = c("Event date", "County", 
                                                             "Reported cases", "Centered average")))
     }
     else{
       brushData <- brushedPoints(split_counties[[input$county]], input$countyBrush)
       brushData$EventDate <- brushData$EventDate %>% format(format = "%B %d, %Y")
+      brushData$ca7 <- brushData$ca7 %>% round(digits = 1)
       return(datatable(brushData[,c(1,2,3,7)], colnames = c("Event date", "County", 
                                                             "Reported cases", "Centered average")))
     }
@@ -43,6 +46,7 @@ output$countyInfo <- renderDT({
     if(is.null(input$countyClick$x)){
       initDT <- split_counties[[input$county]][nrow(split_counties[[input$county]]),c(1,2,3)]
       initDT$EventDate <- initDT$EventDate %>% format(format = "%B %d, %Y")
+      initDT$ca7 <- initDT$ca7 %>% round(digits = 1)
       return(datatable(initDT, colnames = c("Event date", "County", 
                                             "Reported cases")))
     }
@@ -53,12 +57,14 @@ output$countyInfo <- renderDT({
       dateTest <- lvls[round(input$countyClick$x-18261)]
       pointData <- split_counties[[input$county]][which(split_counties[[input$county]]$EventDate == dateTest), ]
       pointData$EventDate <- pointData$EventDate %>% format(format = "%B %d, %Y")
+      pointData$ca7 <- pointData$ca7 %>% round(digits = 1)
       return(datatable(pointData[,c(1,2,3)], colnames = c("Event date", "County", 
                                                           "Reported cases")))
     }
     else{
       brushData <- brushedPoints(split_counties[[input$county]], input$countyBrush)
       brushData$EventDate <- brushData$EventDate %>% format(format = "%B %d, %Y")
+      brushData$ca7 <- brushData$ca7 %>% round(digits = 1)
       return(datatable(brushData[,c(1,2,3)], colnames = c("Event date", "County", 
                                                           "Reported cases")))
     }
