@@ -42,7 +42,7 @@ code <- nimbleCode({
   
   # delta: Covariate effect
   # currently control holiday effect
-  delta ~ dnorm(0, 1)
+  delta ~ dnorm(0, 1/100)
   
   # phi: Overdispersion
   phi ~ dunif(0, 1000)

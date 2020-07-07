@@ -11,7 +11,7 @@ case_ev_plot <- case_ev %>%
 case_ev_plot <- left_join(case_ev_plot, pred_nowcast %>% select(EventDate, pred))
 
 # PRED MANIPULATE FOR PLOTLY
-pred_df$upCI2 <- with(pred_df, upCI - n + pred)
+pred_df$upCI2 <- with(pred_df, upCI - n - pred)
 pred_df$loCI2 <- with(pred_df, n + pred - loCI)
 pred_df1 <- pred_df %>%
   filter(!is.na(pred))
