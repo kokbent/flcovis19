@@ -19,32 +19,16 @@ source("functions.R")
 source("text.R")
 
 # DATA INITIALIZATION
-getData() # Included dates stuff
-THD_dat <- read_csv("data/statewide-thd.csv")
-THD_dat$Weekend <- ifelse(THD_dat$Weekend, "Weekend", "Weekday")
-
-ct_pos <- read_csv("data/ct_pos_perc.csv")
-ct_shp <- st_read("shp/fl_cnt.shp") %>%
-  mutate(County = toupper(County)) %>%
-  left_join(ct_pos)
+getData() # Data from external repo (and local shapefile) plus some manipulation
 
 # Codes and functions for plotting state and counties cases
 source("plotsForStateCounties.R")
 
 # GLOBAL OPTIONS
+# TODO remove if DT no longer required
 options(DT.options = list(searching = FALSE))
 
 # DEFINE UI
-# ui <- tagList(
-#   useShinydashboard(),
-#   navbarPage("FLovid-19 Data Visualizer 9000",
-#              source(file.path("ui", "statewide.R"),  local = TRUE)$value,
-#              source(file.path("ui", "county.R"),  local = TRUE)$value,
-#              source(file.path("ui", "about.R"),  local = TRUE)$value
-#              # source(file.path("ui", "region.R"),  local = TRUE)$value
-#   )#navbarPage
-# )#tagList
-
 ui <- dashboardPage(
   dashboardHeader(title = "Florida COVID-19 data visualizer",
                   titleWidth = 320),

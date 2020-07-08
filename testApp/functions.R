@@ -8,17 +8,28 @@ setGlobalDates <- function(date, setbackDate = 14) {
   display_date <<- date %>% format(format = "%B %d, %Y") %>% as.character()
 }
 
-#IMPORT DATA
+## IMPORT DATA
 getData <- function(){
   
-  #PULL DATA FROM STORAGE (NEED TO RE-UPDATE LOCALLY EVERYDAY)
-  case_ev <<- read.csv("data/case_ev.csv")
-  split_counties <<- readRDS("data/split_counties.rds")
-  pred_df <<- read_csv("data/statewide-nowcast-preds.csv") # Nowcasting
+  ## PULL DATA FROM STORAGE (NEED TO RE-UPDATE LOCALLY EVERYDAY)
+  case_ev <<- read.csv("https://github.com/kokbent/covis19-data/raw/master/case_ev.csv") # Statewide case
+  pred_df <<- read_csv("https://github.com/kokbent/covis19-data/raw/master/statewide-nowcast-preds.csv") # Nowcasting
+  THD_dat <<- read_csv("https://github.com/kokbent/covis19-data/raw/master/statewide-thd.csv") # Statewide Test, Hosp, Death
+  ct_pos <<- read_csv("https://github.com/kokbent/covis19-data/raw/master/ct_pos_perc.csv") # County test positivity
   
+  # RDS cannot be directly linked
+  source("https://github.com/kokbent/covis19-data/raw/master/split_counties.R")
+  split_counties <<- split_counties # County case
+  
+  ## SOME PROCESSING
   case_ev$EventDate <<- ymd(case_ev$EventDate)
+  THD_dat$Weekend <<- ifelse(THD_dat$Weekend, "Weekend", "Weekday")
   
-  #DATA CARPENTRY
+  ct_shp <<- st_read("shp/fl_cnt.shp") %>% # County shapefile to create map
+    mutate(County = toupper(County)) %>%
+    left_join(ct_pos)
+
+  ## SET GLOBAL DATE FOR CHARTING
   setGlobalDates(max(case_ev$EventDate, na.rm = T))
 }
 

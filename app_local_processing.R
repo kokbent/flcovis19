@@ -2,6 +2,7 @@
 library(tidyverse)
 library(jsonlite)
 source("testApp/functions.R")
+path_to_data_repo <- "../covis19-data/"
 
 #### DATA MATTER
 ## Update your linelist -> "data/linelist.csv"
@@ -52,10 +53,15 @@ caseCount(ll)
 
 #### EXPORT THE TWO FILES TO SHINY APP
 write_csv(case_ev, "testApp/data/case_ev.csv")
-write_rds(split_counties, "testApp/data/split_counties.rds")
+dump("split_counties", "testApp/data/split_counties.R")
+# saveRDS(split_counties, "testApp/data/split_counties.rds", version = 3)
 
 #### BUILD TEST-HOSP-DEATH DATAFRAME
 source("test_hosp_death.R")
 
 #### BUILD COUNTY POSITIVITY DATAFRAME
 source("ct_pos.R")
+
+#### CONSLIDATE ALL GENERATED DATA AND EXPORT TO COVIS19-DATA
+files <- list.files("testApp/data/", full.names = T)
+file.copy(files, to = path_to_data_repo, overwrite = T)

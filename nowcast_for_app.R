@@ -17,7 +17,7 @@ dating <- function (dt) {
 }
 
 nowcast_date <- Sys.Date() - ddays(2)
-start_date <- nowcast_date - ddays(17)
+start_date <- nowcast_date - ddays(21)
 end_date <- nowcast_date + ddays(2)
 dt_range <- seq(end_date, start_date, by = -1)
 
@@ -126,8 +126,8 @@ for (j in 1:nrow(case_rt_test)) {
   
   # Find eta index
   rds <- 1:15
-  repl <- constants$NED - 1 - rds
-  repl <- ifelse(repl > 15, 15, repl)
+  repl <- 16 - rds
+  # repl <- ifelse(repl > 15, 15, repl)
   
   eta_colnames <- paste0("eta[", rds, ", ", repl, "]")
   m <- exp(pos_mu + pos_alpha[,ind_ED] + pos_beta[,rds] +
