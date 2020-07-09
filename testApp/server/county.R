@@ -1,15 +1,65 @@
 #RENDER COUNTY-LEVEL PLOTS
-output$countyCases <- renderCachedPlot({
-  if(input$smoothToggle == TRUE){
-    countyPlot(input$county) +
-      geom_line(aes(x = EventDate, y = ca7), lwd = 1.2)
-  } 
-  else {
-    countyPlot(input$county)
-  }
-},
-cacheKeyExpr = { list(input$county, input$smoothToggle) }
-)
+# output$countyCases <- renderCachedPlot({
+#   if(input$smoothToggle == TRUE){
+#     countyPlot(input$county) +
+#       geom_line(aes(x = EventDate, y = ca7), lwd = 1.2)
+#   } 
+#   else {
+#     countyPlot(input$county)
+#   }
+# },
+# cacheKeyExpr = { list(input$county, input$smoothToggle) }
+# )
+
+output$countyCases <- renderPlotly({
+  countyData %>% 
+    filter(County == input$county) %>% 
+    plot_ly() %>%
+    add_bars(x = ~EventDate,
+             y = ~n,
+             color = ~as.factor(weekend),
+             colors = c("#0072B2", "#56b4e9"),
+             name = ~ifelse(weekend, "Weekend Reported", "Weekday, "),
+             text = ~paste('<b>', EventDate, '</b></br>', 
+                           '</br>Reported cases (to date): ', n),
+             hoverinfo = "text") %>%
+    add_lines(x = ~EventDate,
+              y = ~ca7,
+              line = list(color = "black"),
+              name = '7-day moving average (centered)',
+              hoverinfo = "none",
+              visible = "legendonly") %>%
+    layout(
+      legend = list(orientation = "h",
+                    x = 0.5, y = 1,
+                    xanchor = "center"),
+      
+      xaxis = list(
+        title = "",
+        rangeselector = list(
+          buttons = list(
+            list(
+              count = 1,
+              label = "1 mo",
+              step = "month",
+              stepmode = "backward"),
+            list(
+              count = 2,
+              label = "2 mo",
+              step = "month",
+              stepmode = "backward"),
+            list(step = "all"))),
+        
+        rangeslider = list(type = "date")),
+      
+      yaxis = list(title = "Reported Case"),
+      
+      barmode = "overlay",
+      
+      hovermode = "compare"
+    ) %>%
+    plotly_conf()
+})
 
 
 

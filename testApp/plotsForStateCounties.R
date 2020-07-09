@@ -63,7 +63,7 @@ statePlot <- plot_ly() %>%
               hoverinfo = "none",
               visible = "legendonly")
 
-# LAYOUT AND CONFIG
+# STATE PLOT LAYOUT AND CONFIG
 statePlot <- statePlot %>%
   layout(
     legend = list(orientation = "h",
@@ -96,6 +96,62 @@ statePlot <- statePlot %>%
     hovermode = "compare"
   ) %>%
   plotly_conf()
+
+# AGGREGATE COUNTY DATA
+countyData = data.frame()
+for (i in 1:length(split_counties)) {
+  tempDat = split_counties[[i]]
+  countyData = bind_rows(countyData, tempDat)
+}
+
+# COUNTY PLOT
+countyPlotly <- plot_ly() %>%
+  add_bars(x = ~EventDate,
+           y = ~n,
+           color = ~as.factor(weekend),
+           colors = c("#0072B2", "#56b4e9"),
+           name = ~ifelse(weekend, "Weekend Reported", "Weekday, "),
+           text = ~paste('<b>', EventDate, '</b></br>', 
+                         '</br>Reported cases (to date): ', n),
+           hoverinfo = "text") %>%
+  add_lines(x = ~EventDate,
+            y = ~ca7,
+            line = list(color = "black"),
+            name = '7-day moving average (centered)',
+            hoverinfo = "none",
+            visible = "legendonly") %>%
+  layout(
+    legend = list(orientation = "h",
+                  x = 0.5, y = 1,
+                  xanchor = "center"),
+    
+    xaxis = list(
+      title = "",
+      rangeselector = list(
+        buttons = list(
+          list(
+            count = 1,
+            label = "1 mo",
+            step = "month",
+            stepmode = "backward"),
+          list(
+            count = 2,
+            label = "2 mo",
+            step = "month",
+            stepmode = "backward"),
+          list(step = "all"))),
+      
+      rangeslider = list(type = "date")),
+    
+    yaxis = list(title = "Reported Case"),
+    
+    barmode = "overlay",
+    
+    hovermode = "compare"
+  ) %>%
+  plotly_conf()
+
+
 
 ## COUNTY PLOT
 countyPlot <- function(county){

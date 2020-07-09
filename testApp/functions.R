@@ -87,6 +87,7 @@ dateAvgFill <- function(){
   }
 }
 
+
 #MODEBAR CONFIG FOR PLOTLY (STANDARDIZING IT EVERYWHERE)
 plotly_conf <- function (p) {
   config(
