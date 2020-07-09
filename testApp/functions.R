@@ -13,13 +13,10 @@ getData <- function(){
   
   ## PULL DATA FROM STORAGE (NEED TO RE-UPDATE LOCALLY EVERYDAY)
   case_ev <<- read.csv("https://github.com/kokbent/covis19-data/raw/master/case_ev.csv") # Statewide case
+  countyData <<- read_csv("https://github.com/kokbent/covis19-data/raw/master/county_case.csv") # County case
   pred_df <<- read_csv("https://github.com/kokbent/covis19-data/raw/master/statewide-nowcast-preds.csv") # Nowcasting
   THD_dat <<- read_csv("https://github.com/kokbent/covis19-data/raw/master/statewide-thd.csv") # Statewide Test, Hosp, Death
   ct_pos <<- read_csv("https://github.com/kokbent/covis19-data/raw/master/ct_pos_perc.csv") # County test positivity
-  
-  # RDS cannot be directly linked
-  source("https://github.com/kokbent/covis19-data/raw/master/split_counties.R")
-  split_counties <<- split_counties # County case
   
   ## SOME PROCESSING
   case_ev$EventDate <<- ymd(case_ev$EventDate)
@@ -49,6 +46,7 @@ caseCount <- function(dat){
     ungroup
   
   county_ct <<- dat %>% 
+    filter(EvetDate < Sys.Date()) %>%
     group_by(EventDate, County) %>% 
     count %>% 
     ungroup

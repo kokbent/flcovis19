@@ -53,8 +53,8 @@ caseCount(ll)
 
 #### EXPORT THE TWO FILES TO SHINY APP
 write_csv(case_ev, "testApp/data/case_ev.csv")
-dump("split_counties", "testApp/data/split_counties.R")
-# saveRDS(split_counties, "testApp/data/split_counties.rds", version = 3)
+county_case <- bind_rows(split_counties)
+write_csv(county_case, "testApp/data/county_case.csv")
 
 #### BUILD TEST-HOSP-DEATH DATAFRAME
 source("test_hosp_death.R")
