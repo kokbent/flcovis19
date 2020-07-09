@@ -17,9 +17,10 @@ dating <- function (dt) {
 }
 
 nowcast_date <- Sys.Date() - ddays(2)
-start_date <- nowcast_date - ddays(21)
+start_date <- nowcast_date - ddays(24)
 end_date <- nowcast_date + ddays(2)
 dt_range <- seq(end_date, start_date, by = -1)
+dt_range <- dt_range[dt_range != ymd("2020-06-22")]
 
 dat_train <- data.frame()
 for (i in 1:length(dt_range)) {

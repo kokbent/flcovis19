@@ -47,7 +47,7 @@ code <- nimbleCode({
   # phi: Overdispersion
   phi ~ dunif(0, 1000)
   
-  # tau_a: Precision of alpha
+  # tau_a: Precision of alpha-
   sig_a ~ T(dnorm(0, .5), 0, )
   tau_a <- 1/(sig_a * sig_a)
   
@@ -60,6 +60,6 @@ code <- nimbleCode({
   # tau_g <- 1/(sig_g * sig_g)
   
   # tau_e: Precision of eta
-  sig_e ~ T(dnorm(0, .5), 0, )
+  sig_e ~ T(dnorm(0, .1), 0, )
   tau_e <- 1/(sig_e * sig_e)
 })

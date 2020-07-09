@@ -52,7 +52,16 @@ statePlot <- plot_ly() %>%
             line = list(color = "black"),
             name = '7-day moving average (centered)',
             hoverinfo = "none",
-            visible = "legendonly")
+            visible = "legendonly") %>%
+  add_ribbons(x = ~EventDate,
+              ymax = ~ma7_upCI,
+              ymin = ~ma7_loCI,
+              data = pred_df,
+              line = list(color = 'rgba(100, 100, 100, 0)'),
+              fillcolor = 'rgba(100, 100, 100, 0.5)',
+              name = '95% prediction interval (moving average)',
+              hoverinfo = "none",
+              visible = "legendonly")
 
 # LAYOUT AND CONFIG
 statePlot <- statePlot %>%
