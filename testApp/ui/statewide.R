@@ -11,26 +11,18 @@ tabItem(tabName = "statewide",
         ),#fluidRow
         hr(),
         fluidRow(
-          column(8, 
-                 align = "center",
-                 box(title = "Selected data (use mouse to select from plot above)", 
-                     width = NULL, 
-                     status = "primary", 
-                     solidHeader = TRUE,
-                     DT::DTOutput("stateInfo")
-                 )#box
-          ),#column
-          column(4, 
-                 align = "center",
-                 box(title = "Plot details", 
-                     width = NULL, 
-                     status = "primary", 
-                     solidHeader = TRUE,
-                     p(strong("Event date: "), eventDateDesc),
-                     # p(strong("Number of Cases: "), "definition."),
-                     p(strong("Reported cases: "), reportedCaseDesc),
-                     p(strong("Anticipated cases: "), anticipatedCaseDesc)
-                 )#box
-          )#column
+                column(2),
+                column(8,
+                       box(title = "Plot details", 
+                           width = NULL, 
+                           status = "primary", 
+                           solidHeader = TRUE,
+                           p(strong("Event date: "), eventDateDesc),
+                           # p(strong("Number of Cases: "), "definition."),
+                           p(strong("Reported cases: "), reportedCaseDesc),
+                           p(strong("Anticipated cases: "), anticipatedCaseDesc)
+                       )#box
+                ),
+                column(2)
         )
 )

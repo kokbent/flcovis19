@@ -6,7 +6,6 @@ library(readr)
 library(lubridate)
 library(DT)
 library(sf)
-#library(shinyjs)
 library(shinydashboard)
 library(shinyWidgets)
 library(cowplot)
@@ -15,7 +14,6 @@ library(leaflet)
 
 # IMPORT DATA INITIALIZATION FUNCTIONS
 source("functions.R")
-#source("loadingMessages.R")
 source("text.R")
 
 # DATA INITIALIZATION

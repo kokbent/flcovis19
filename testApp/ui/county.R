@@ -5,7 +5,7 @@ tabItem(tabName = "county",
                  h4(plotCountyDisclaimer),
                  h4(plotClickInstr),
                  h3("Select county"),
-                 selectInput("county", label = "", choices = names(split_counties)),
+                 selectInput("county", label = "", choices = unique(countyData$County)),
                  plotlyOutput("countyCases", 
                               width = "90%",
                               height = "600px")
@@ -18,18 +18,15 @@ tabItem(tabName = "county",
         ),#fluidRow
         hr(),
         fluidRow(
-          column(8, align = "center",
-                 box(title = "Selected data (use mouse to select from plot above)", width = NULL, status = "primary", solidHeader = TRUE,
-                     DT::DTOutput("countyInfo")
-                 )#box
-          ),#column
-          column(4, align = "center",
-                 box(title = "Plot details", width = NULL, status = "primary", solidHeader = TRUE,
-                     p(strong("Event date: "), "definition."),
-                     p(strong("Reported cases: "), "definition."),
-                     # p(strong("Trailing average: "), "definition."),
-                     p(strong("Centered average: "), "definition.")
-                 )#box
-          )#column
+                column(2),
+                column(8,
+                       box(title = "Plot details", width = NULL, status = "primary", solidHeader = TRUE,
+                           p(strong("Event date: "), "definition."),
+                           p(strong("Reported cases: "), "definition."),
+                           # p(strong("Trailing average: "), "definition."),
+                           p(strong("Centered average: "), "definition.")
+                       )
+                ),
+                column(2)
         )#fluidRow
 )

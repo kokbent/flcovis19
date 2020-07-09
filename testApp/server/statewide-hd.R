@@ -12,7 +12,7 @@ output$stateHosp <- renderPlotly({
                              '</br> 7-day Moving Average: ', round(Hosp_ma7))) %>%
     add_lines(x = ~Date,
               y = ~Hosp_ma7,
-              line = list(color = "black"),
+              line = list(color = "d55e00"),
               inherit = F,
               name = '7-day moving average (centered)',
               hoverinfo = "none")
@@ -57,7 +57,7 @@ output$stateDeath <- renderPlotly({
                              '</br> 7-day Moving Average: ', round(Death_ma7))) %>%
     add_lines(x = ~Date,
               y = ~Death_ma7,
-              line = list(color = "black"),
+              line = list(color = "d55e00"),
               inherit = F,
               name = '7-day moving average (centered)',
               hoverinfo = "none")
