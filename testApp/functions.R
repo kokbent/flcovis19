@@ -46,7 +46,7 @@ caseCount <- function(dat){
     ungroup
   
   county_ct <<- dat %>% 
-    filter(EvetDate < Sys.Date()) %>%
+    filter(EventDate < Sys.Date()) %>%
     group_by(EventDate, County) %>% 
     count %>% 
     ungroup

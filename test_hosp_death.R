@@ -2,7 +2,12 @@ library(tidyverse)
 library(lubridate)
 library(googlesheets4)
 
-sheets_auth("kokbent@gmail.com")
+if (packageVersion("googlesheets4") == "0.2.0") {
+  gs4_auth("kokbent@gmail.com")
+} else {
+  sheets_auth("kokbent@gmail.com")
+}
+
 dat <- read_sheet("1EUr3mhs1PnN4HrF4HgYH1EalQwOgH1nwhHddpZ-fHJg")
 dat <- dat %>%
   filter(!is.na(CRDeath))
