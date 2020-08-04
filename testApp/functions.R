@@ -17,6 +17,7 @@ getData <- function(){
   pred_df <<- read_csv("https://github.com/kokbent/covis19-data/raw/master/statewide-nowcast-preds.csv") # Nowcasting
   THD_dat <<- read_csv("https://github.com/kokbent/covis19-data/raw/master/statewide-thd.csv") # Statewide Test, Hosp, Death
   ct_pos <<- read_csv("https://github.com/kokbent/covis19-data/raw/master/ct_pos_perc.csv") # County test positivity
+  death_preds <<- read_csv("https://github.com/kokbent/covis19-data/raw/master/death_preds.csv")
   
   ## SOME PROCESSING
   case_ev$EventDate <<- ymd(case_ev$EventDate)

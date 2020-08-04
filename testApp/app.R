@@ -40,6 +40,11 @@ ui <- dashboardPage(
       menuItem("County cases", 
                tabName = "county", 
                icon = icon("dashboard")),
+      menuItem("Statewide Death",
+               tabName = "statewide-death",
+               icon = icon("ambulance"),
+               badgeLabel = "beta",
+               badgeColor = "green"),
       menuItem("Hospitalization and death", 
                tabName = "statewide-hd", 
                icon = icon("hospital-symbol"),
@@ -70,6 +75,7 @@ ui <- dashboardPage(
     tabItems(
       source(file.path("ui", "statewide.R"),  local = TRUE)$value,
       source(file.path("ui", "county.R"),  local = TRUE)$value,
+      source(file.path("ui", "statewide-death.R"),  local = TRUE)$value,
       source(file.path("ui", "statewide-hd.R"),  local = TRUE)$value,
       source(file.path("ui", "tests.R"),  local = TRUE)$value,
       source(file.path("ui", "about.R"),  local = TRUE)$value
@@ -81,10 +87,10 @@ ui <- dashboardPage(
 server <- function(input, output, session) {
   source(file.path("server", "statewide.R"),  local = TRUE)$value
   source(file.path("server", "county.R"),  local = TRUE)$value
+  source(file.path("server", "statewide-death.R"),  local = TRUE)$value
   source(file.path("server", "statewide-hd.R"),  local = TRUE)$value
   source(file.path("server", "tests.R"),  local = TRUE)$value
   source(file.path("server", "about.R"),  local = TRUE)$value
-  # source(file.path("server", "region.R"),  local = TRUE)$value
 } 
 
 # RUN APPLICATION
