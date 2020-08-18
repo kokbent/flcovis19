@@ -62,14 +62,6 @@ ui <- dashboardPage(
                badgeColor = "yellow")
     ),
     br(),
-    box(
-      title = "Settings",
-      background = "green",
-      width = 12,
-      prettySwitch(inputId = "smoothToggle", 
-                   label = "Moving Average",
-                   value = TRUE)
-    )
   ),
   dashboardBody(
     tabItems(
