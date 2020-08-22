@@ -60,8 +60,7 @@ ui <- dashboardPage(
                icon = icon("info"),
                badgeLabel = "work in progress",
                badgeColor = "yellow")
-    ),
-    br(),
+    )
   ),
   dashboardBody(
     tabItems(
