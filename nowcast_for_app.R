@@ -27,6 +27,8 @@ for (i in 1:length(dt_range)) {
   dt <- dt_range[i]
   in_file <- paste0(folder, "linelist_", str_remove_all(dt, "-"), ".csv")
   
+  if (!file.exists(in_file)) next
+  
   ll <- read.csv(in_file) %>%
     mutate(EventDate = dating(EventDate),
            ChartDate = dating(ChartDate),
@@ -237,7 +239,7 @@ ggplot() +
                              "Weekday Reported", "Weekend Reported")) +
   scale_x_date(expand=c(0,0), date_breaks = "2 week", date_labels = "%b %d",
                limits = c(ymd("2020-02-29"), nowcast_date+ddays(1))) +
-  scale_y_continuous(expand = c(0, 0), limits = c(0, max(pred_df$upCI) + 100)) +
+  scale_y_continuous(expand = c(0, 0)) +
   theme_bw() +
   theme(legend.position = "top", 
         plot.margin = margin(10, 30, 10, 10), 

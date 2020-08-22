@@ -88,8 +88,7 @@ statePlot <- statePlot %>%
       
       rangeslider = list(type = "date")),
     
-    yaxis = list(title = "Reported Case",
-                 range = c(0, max(pred_df1$upCI, na.rm = T)*1.1)),
+    yaxis = list(title = "Reported Case"),
     
     barmode = "overlay",
     
