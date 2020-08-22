@@ -4,7 +4,12 @@ library(stringr)
 library(nimble)
 library(googlesheets4)
 
-sheets_auth(email = "kokbent@gmail.com")
+if (packageVersion("googlesheets4") == "0.2.0") {
+  gs4_auth("kokbent@gmail.com")
+} else {
+  sheets_auth("kokbent@gmail.com")
+}
+
 dat <- sheets_read("1EUr3mhs1PnN4HrF4HgYH1EalQwOgH1nwhHddpZ-fHJg", 
                    sheet = "Reporting delay of death")
 
@@ -87,7 +92,7 @@ samp <- runMCMC(mcmcc, niter = 20000, nburnin = 10000, thin = 10, nchains = 3,
 #   samp[[i]] <- samp[[i]][,ind]
 # }
 
-summ <- MCMCvis::MCMCsummary(samp)
+# summ <- MCMCvis::MCMCsummary(samp)
 
 
 #### Extract Posterior Samples
