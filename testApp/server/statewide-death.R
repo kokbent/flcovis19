@@ -16,7 +16,7 @@ output$stateDeaths <- renderPlot({
     scale_fill_manual(name="", values=c("#d55e00", "#0072b2"),
                       labels=c("Anticipated", "Reported")) +
     scale_x_date(expand=c(0,0), date_breaks = "2 week", date_labels = "%b %d",
-                 limits = c(ymd("2020-06-15"), now_date)) +
+                 limits = c(ymd("2020-05-13"), now_date)) +
     scale_y_continuous(expand = c(0, 0), 
                        limits = c(0, max(death_preds$n + death_preds$upCI, na.rm = T) * 1.1)) +
     theme_bw() +

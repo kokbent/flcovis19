@@ -62,6 +62,9 @@ source("test_hosp_death.R")
 #### BUILD COUNTY POSITIVITY DATAFRAME
 source("ct_pos.R")
 
+#### NOWCAST FOR STATEWIDE-DEATH
+source("nowcast_statewide_death.R")
+
 #### CONSLIDATE ALL GENERATED DATA AND EXPORT TO COVIS19-DATA
 files <- list.files("testApp/data/", full.names = T)
 file.copy(files, to = path_to_data_repo, overwrite = T)
