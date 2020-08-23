@@ -1,4 +1,7 @@
-aboutText <- "To be completed."
+aboutText <- "This visualizer is created by Hladish Lab members to visualize the COVID-19 pandemic in Florida. 
+This visualizer is currently intended for internal use only. Aside from the nowcasting models which we use to 
+account for reporting delay/revision in numbers statewide cases and deaths, all other numbers are extracted from 
+data published by Florida DOH."
 
 #contributorsText <- cat(paste("Thomas Hladish, Ph.D., Department of Biology, and the Emerging Pathogens Institute, University of Florida, Gainesville, USA", "Arlin Stoltzfus, Ph.D., National Institute of Standards and Technology", "Kok Ben Toh, M.Sc., School of Natural Resources and Environment, University of Florida, Gainesville, USA", "Sanjana Bhargava, B.S., University of Florida, Gainesville, USA", "Alexander Pillai,  Microbiology major, University of Florida, Gainesville, USA", "Dianela Perdomo, Biology major, University of Florida, Gainesville, USA", sep="\n"))
 
@@ -16,8 +19,7 @@ anticipatedCaseDesc <- "A computer-based prediction of unreported cases using a 
 
 nowcastingDesc <- "Reported number of cases on a particular event day may not be finalized because there can be significant delay between 
 lab event (e.g. sample collection) and case confirmation. In recent days, the median number of days between lab event and case confirmation is
-around 3, and 90% of the cases were confirmed within 10 days after first lab event. Nevertheless, the lab event date of the report cases is 
-subjected to revision from day to day for up to 2 weeks or more after initial assignment. Our nowcasting model anticpates the number of cases
+around 1, and 90% of the cases were confirmed within 2 days after first lab event. Our nowcasting model anticipates the number of cases
 at 14 days after the lab event day to serve as a guidance. This is done by accounting for the past trend in reporting delay trend, in daily revision
 of cases event date, and currently reported numbers. Details about the model will be made available in near future."
 
@@ -25,6 +27,8 @@ plotStateHospDisclaimer <- "Numbers inferred from DOH daily updates"
 
 plotStateDeathDisclaimer <- "Numbers inferred from DOH daily updates"
 
-plotStatePosDisclaimer <- "TO BE WRITTEN"
+plotStatePosDisclaimer <- "Numbers inferred from DOH daily updates. Calculated by number of residents with positive results over 
+number of residents with test results per day"
 
-plotCountyPosDisclaimer <- "TO BE WRITTEN"
+plotCountyPosDisclaimer <- "Numbers inferred from DOH daily updates. Calculated by total daily number of residents with positive 
+results over total daily number of residents with test results over past 7 days"

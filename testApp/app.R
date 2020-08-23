@@ -42,24 +42,16 @@ ui <- dashboardPage(
                icon = icon("dashboard")),
       menuItem("Statewide Death",
                tabName = "statewide-death",
-               icon = icon("ambulance"),
-               badgeLabel = "beta",
-               badgeColor = "green"),
+               icon = icon("ambulance")),
       menuItem("Hospitalization and death", 
                tabName = "statewide-hd", 
-               icon = icon("hospital-symbol"),
-               badgeLabel = "beta",
-               badgeColor = "green"),
+               icon = icon("hospital-symbol")),
       menuItem("Tests", 
                tabName = "tests", 
-               icon = icon("dna"),
-               badgeLabel = "beta",
-               badgeColor = "green"),
+               icon = icon("dna")),
       menuItem("About", 
                tabName = "about", 
-               icon = icon("info"),
-               badgeLabel = "work in progress",
-               badgeColor = "yellow")
+               icon = icon("info"))
     )
   ),
   dashboardBody(
