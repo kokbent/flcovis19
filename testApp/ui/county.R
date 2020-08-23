@@ -21,10 +21,7 @@ tabItem(tabName = "county",
                 column(2),
                 column(8,
                        box(title = "Plot details", width = NULL, status = "primary", solidHeader = TRUE,
-                           p(strong("Event date: "), "definition."),
-                           p(strong("Reported cases: "), "definition."),
-                           # p(strong("Trailing average: "), "definition."),
-                           p(strong("Centered average: "), "definition.")
+                           p(strong("Event date: "), eventDateDesc)
                        )
                 ),
                 column(2)
