@@ -1,4 +1,4 @@
-pal <- colorNumeric(palette = "RdYlBu", na.color = "#00000000", domain = c(0, 40),
+pal <- colorNumeric(palette = "RdYlBu", na.color = "#00000000", domain = c(0, 50),
                     reverse = T)
 
 output$countyPos <- renderLeaflet(
@@ -11,7 +11,7 @@ output$countyPos <- renderLeaflet(
       label = ~htmltools::htmlEscape(paste0(County, " : ", round(pos_perc, 1), "%"))
     ) %>%
     addLegend(
-      pal = pal, values = 0:4 * 10,
+      pal = pal, values = 0:5 * 10,
       title = "% Positive"
     )
 )
